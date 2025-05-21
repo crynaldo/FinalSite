@@ -601,13 +601,13 @@
     </div>
   </div>
 
-  <script>
-  // File configuration
+<script>
+  // File configuration for the downloadable ZIP
   const SCRIPTS_FILE_CONFIG = {
-    fileName: "All_Scripts.zip",
-    fileType: "ZIP file",
-    filePath: "/All_Scripts.zip", // Make sure this file is in the public/ folder of your deployed project
-    fileSize: "2.4 MB"
+    fileName: "All_Scripts.zip",      // Displayed name
+    fileType: "ZIP file",             // Displayed type
+    filePath: "/All_Scripts.zip",     // Must match the file in the public/ folder
+    fileSize: "2.4 MB"                // Optional: Displayed size
   };
 
   function app() {
@@ -910,7 +910,7 @@
           this.adjustTextareaHeight();
         },
         
-        handleDownloadFile(fileName) {
+      handleDownloadFile(fileName) {
         const link = document.createElement('a');
         link.href = SCRIPTS_FILE_CONFIG.filePath;
         link.download = fileName;
