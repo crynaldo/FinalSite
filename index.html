@@ -911,13 +911,14 @@
         },
         
       handleDownloadFile(fileName) {
-        const link = document.createElement('a');
-        link.href = SCRIPTS_FILE_CONFIG.filePath;
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      },
+      const link = document.createElement('a');
+      // This assumes files are in the public directory and are accessible at the root URL
+      link.href = '/' + fileName;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+     document.body.removeChild(link);
+    },
         
         scrollToBottom() {
           setTimeout(() => {
