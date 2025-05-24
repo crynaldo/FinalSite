@@ -602,12 +602,12 @@
   </div>
 
 <script>
-  // File configuration for the downloadable ZIP
+  // File configuration - Updated for GitHub Pages
   const SCRIPTS_FILE_CONFIG = {
-    fileName: "All_Scripts.zip",      // Displayed name
-    fileType: "ZIP file",             // Displayed type
-    filePath: "/All_Scripts.zip",     // Must match the file in the public/ folder
-    fileSize: "2.4 MB"                // Optional: Displayed size
+    fileName: "All_Scripts.zip",
+    fileType: "ZIP file",
+    filePath: "./All_Scripts.zip", // GitHub Pages path (root level)
+    fileSize: "2.4 MB"
   };
 
   function app() {
@@ -910,15 +910,16 @@
           this.adjustTextareaHeight();
         },
         
-      handleDownloadFile(fileName) {
-      const link = document.createElement('a');
-      // This assumes files are in the public directory and are accessible at the root URL
-      link.href = '/' + fileName;
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
-     document.body.removeChild(link);
-    },
+        // Updated download function for GitHub Pages
+        handleDownloadFile(fileName) {
+          const link = document.createElement('a');
+          link.href = SCRIPTS_FILE_CONFIG.filePath;
+          link.download = fileName;
+          link.target = '_blank'; // Open in new tab as fallback
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        },
         
         scrollToBottom() {
           setTimeout(() => {
