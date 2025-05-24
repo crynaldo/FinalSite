@@ -250,6 +250,20 @@
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
   }
+
+  /* Debug info */
+  .debug-info {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 1000;
+    max-width: 300px;
+  }
 </style>
 <script>
   tailwind.config = {
@@ -270,6 +284,13 @@
 </head>
 <body>
 <div x-data="app()" x-init="init()" class="min-h-screen relative overflow-hidden">
+  <!-- Debug Info (remove in production) -->
+  <div x-show="debugMode" class="debug-info">
+    <div>API Key: <span x-text="apiKey ? 'Set ✓' : 'Not Set ✗'"></span></div>
+    <div>Last API Call: <span x-text="lastApiCall || 'None'"></span></div>
+    <div>Last Error: <span x-text="lastError || 'None'"></span></div>
+  </div>
+
   <!-- Background effects -->
   <div class="absolute inset-0 w-full h-full overflow-hidden">
     <div class="bg-blur-1"></div>
@@ -348,6 +369,10 @@
             <span x-show="!apiKey" class="text-violet-400">(Demo Mode)</span>
             <span x-show="apiKey" class="text-green-400">(AI Enabled)</span>
           </p>
+          <!-- Debug toggle -->
+          <button @click="debugMode = !debugMode" class="text-xs text-white/30 hover:text-white/60">
+            Toggle Debug
+          </button>
         </div>
 
         <!-- Messages Container -->
@@ -671,47 +696,55 @@ const SCRIPTS_FILE_CONFIG = {
   fileSize: "2.4 MB"
 };
 
-// Enhanced AI Configuration with better personality
+// Enhanced AI Configuration with much more detailed personality
 const AI_CONFIG = {
-  systemPrompt: `You are Zap, the official AI assistant for Final Site - a vibrant Discord community focused on providing free scripts and tech support.
+  systemPrompt: `You are Zap, the official AI assistant for Final Site - a Discord community focused on providing free scripts and tech support. You should respond like a real AI assistant (similar to ChatGPT or Claude) with intelligent, thoughtful, and varied responses.
 
-PERSONALITY & TONE:
-- Conversational and natural, like talking to a tech-savvy friend
-- Enthusiastic but not overly excited
-- Helpful and knowledgeable about scripting, Discord, and tech
-- Use casual language and occasional tech slang
-- Be concise but informative (2-3 sentences usually)
-- Use emojis sparingly and naturally
+CORE PERSONALITY:
+- Intelligent and knowledgeable about technology, programming, and Discord communities
+- Conversational and natural - respond like you're having a real conversation
+- Helpful and thorough in explanations when needed
+- Enthusiastic about Final Site but not overly promotional
+- Use varied language and avoid repetitive phrases
+- Be creative and engaging in your responses
 
-CORE KNOWLEDGE:
+KNOWLEDGE BASE:
 - Final Site Discord: https://discord.gg/nn9Gzppq6V
-- We provide completely FREE scripts (no payment ever)
-- Active staff available for support
-- Community-focused and welcoming to all skill levels
-- Scripts include automation, utilities, and development tools
+- We provide completely FREE scripts (automation, utilities, development tools)
+- Active community with helpful staff and members
+- Scripts include: automation tools, productivity utilities, development helpers, and more
+- Community welcomes all skill levels from beginners to experts
 
-RESPONSE GUIDELINES:
-- Answer questions directly and specifically
-- If asked about scripts: mention they're free and offer the download
-- If asked about help/support: direct to Discord community
-- If asked about yourself: briefly explain you're the AI assistant for Final Site
-- For technical questions: provide helpful info and suggest Discord for deeper help
-- For general chat: be friendly and try to relate back to the community when natural
+RESPONSE STYLE:
+- Give thoughtful, specific answers to questions
+- Vary your language and sentence structure
+- Provide context and explanations when helpful
+- Ask follow-up questions when appropriate
+- Share relevant knowledge about programming, tech, or community topics
+- Be genuinely helpful rather than just promotional
+
+SPECIAL BEHAVIORS:
+- When asked about scripts: Explain what we offer and provide the download
+- When asked for help: Direct to Discord but also try to help directly if possible
+- When asked technical questions: Provide useful information and suggest community resources
+- When greeted: Introduce yourself naturally and ask how you can help
+- For general conversation: Be engaging and try to be genuinely helpful
 
 AVOID:
 - Generic responses like "That's interesting" or "Feel free to ask"
-- Overly promotional language
-- Repeating the same phrases
-- Long explanations unless specifically asked
+- Repetitive language patterns
+- Overly promotional tone
+- Short, unhelpful responses
+- Robotic or scripted-sounding language
 
-Remember: You're here to be genuinely helpful while building community engagement.`,
+Remember: You're an intelligent AI assistant who happens to represent Final Site. Be genuinely helpful, knowledgeable, and engaging in every interaction.`,
   
   fallbackResponses: [
-    "Hmm, I'm running in demo mode right now. For better responses, try adding your OpenAI API key in settings! 🔧",
-    "That's a good question! Our Discord community probably has some great insights on that topic.",
-    "I'd love to help with that! You might get more detailed answers from our community experts in Discord.",
-    "Interesting! While I'm in demo mode, our Discord server has tons of knowledgeable people who could dive deeper into that.",
-    "Good question! For the full AI experience and better answers, consider adding your API key in the settings."
+    "I'm currently running in demo mode, so my responses might be a bit limited. For the full AI experience, you can add your OpenAI API key in the settings! In the meantime, our Discord community is always active and ready to help with any questions you might have.",
+    "That's a great question! While I'm in demo mode right now, I'd love to help you find the answer. Our Discord community has tons of knowledgeable members who could dive deep into that topic with you.",
+    "Interesting topic! I'm running with limited capabilities at the moment, but our Discord server has some really smart people who love discussing these kinds of questions. You might get some fascinating insights there!",
+    "I'd love to give you a more detailed response, but I'm currently in demo mode. For better AI interactions, consider adding your API key in settings. Otherwise, our Discord community is incredibly helpful for questions like this!",
+    "Good question! While my demo mode responses are pretty basic, our Final Site community has members with deep expertise in all sorts of tech topics. They'd probably have some great insights to share!"
   ]
 };
 
@@ -737,6 +770,9 @@ function app() {
       showApiKeyModal: false,
       apiKey: '',
       tempApiKey: '',
+      debugMode: false,
+      lastApiCall: '',
+      lastError: '',
       
       commandSuggestions: [
         {
@@ -800,6 +836,7 @@ function app() {
         if (this.tempApiKey.trim()) {
           this.apiKey = this.tempApiKey.trim();
           localStorage.setItem('openai_api_key', this.apiKey);
+          this.lastApiCall = 'API key saved';
         }
         this.showApiKeyModal = false;
         this.tempApiKey = '';
@@ -808,20 +845,46 @@ function app() {
       skipApiKey() {
         this.showApiKeyModal = false;
         this.tempApiKey = '';
+        this.lastApiCall = 'Skipped API setup';
       },
 
-      // Enhanced AI Integration with better conversation context
+      // Enhanced AI Integration with better debugging
       async callOpenAI(userMessage) {
         if (!this.apiKey) {
+          this.lastApiCall = 'No API key - using fallback';
           return this.getFallbackResponse(userMessage);
         }
 
+        this.lastApiCall = 'Calling OpenAI API...';
+        this.lastError = '';
+
         try {
           // Build conversation context from recent messages
-          const conversationHistory = this.messages.slice(-6).map(msg => ({
+          const conversationHistory = this.messages.slice(-8).map(msg => ({
             role: msg.sender === 'user' ? 'user' : 'assistant',
             content: msg.content
           }));
+
+          const requestBody = {
+            model: 'gpt-3.5-turbo',
+            messages: [
+              {
+                role: 'system',
+                content: AI_CONFIG.systemPrompt
+              },
+              ...conversationHistory,
+              {
+                role: 'user',
+                content: userMessage
+              }
+            ],
+            max_tokens: 500,
+            temperature: 0.9,
+            presence_penalty: 0.2,
+            frequency_penalty: 0.3
+          };
+
+          console.log('Making API request:', requestBody);
 
           const response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
@@ -829,34 +892,27 @@ function app() {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${this.apiKey}`
             },
-            body: JSON.stringify({
-              model: 'gpt-3.5-turbo',
-              messages: [
-                {
-                  role: 'system',
-                  content: AI_CONFIG.systemPrompt
-                },
-                ...conversationHistory,
-                {
-                  role: 'user',
-                  content: userMessage
-                }
-              ],
-              max_tokens: 300,
-              temperature: 0.8,
-              presence_penalty: 0.1,
-              frequency_penalty: 0.1
-            })
+            body: JSON.stringify(requestBody)
           });
 
+          console.log('API Response status:', response.status);
+
           if (!response.ok) {
-            throw new Error(`API Error: ${response.status}`);
+            const errorData = await response.text();
+            console.error('API Error Response:', errorData);
+            throw new Error(`API Error: ${response.status} - ${errorData}`);
           }
 
           const data = await response.json();
+          console.log('API Response data:', data);
+          
+          this.lastApiCall = `Success - ${data.usage?.total_tokens || 'unknown'} tokens`;
           return data.choices[0].message.content;
+
         } catch (error) {
           console.error('OpenAI API Error:', error);
+          this.lastError = error.message;
+          this.lastApiCall = 'API call failed';
           return this.getFallbackResponse(userMessage);
         }
       },
@@ -866,15 +922,19 @@ function app() {
         const lowerMessage = userMessage.toLowerCase();
         
         if (lowerMessage.includes('script')) {
-          return "I'd love to tell you about our scripts! They're completely free. Check our Discord for the full collection! 📦";
+          return "I'd love to tell you about our scripts! We have a huge collection of completely free automation tools, utilities, and development helpers. Our Discord community has even more resources and people who can help you find exactly what you need. Want me to share our scripts collection?";
         }
         
         if (lowerMessage.includes('help') || lowerMessage.includes('support')) {
-          return "Need help? Our Discord community is super active and ready to assist! Jump in and ask away. 🤝";
+          return "I'm here to help! While I'm running in demo mode right now, I can still try to assist you. Our Discord community is also incredibly active - we have developers, scripters, and tech enthusiasts who love helping each other out. What specific help are you looking for?";
         }
         
         if (lowerMessage.includes('discord')) {
-          return "Our Discord is where all the magic happens! Great community, free scripts, and awesome support. 🎮";
+          return "Our Discord server is the heart of the Final Site community! It's where we share scripts, help each other with coding problems, discuss new tech, and just hang out. We've got channels for different programming languages, script sharing, general tech talk, and more. It's a really welcoming community for all skill levels.";
+        }
+
+        if (lowerMessage.includes('who are you') || lowerMessage.includes('what are you')) {
+          return "I'm Zap, the AI assistant for Final Site! I'm here to help you learn about our community, find scripts, answer tech questions, and connect you with our awesome Discord community. Think of me as your friendly guide to everything Final Site has to offer. What would you like to know?";
         }
         
         // Default fallbacks
@@ -962,8 +1022,8 @@ function app() {
         this.isTyping = true;
         
         // More realistic typing delay based on message length and complexity
-        const baseDelay = 800;
-        const lengthDelay = Math.min(message.length * 25, 2000);
+        const baseDelay = 1000;
+        const lengthDelay = Math.min(message.length * 30, 3000);
         const typingDelay = baseDelay + lengthDelay;
         
         setTimeout(() => {
@@ -1014,12 +1074,15 @@ function app() {
             userMessage.toLowerCase().includes(keyword)
           );
           
-          if (hasScriptKeyword) {
-            const response = await this.callOpenAI(userMessage);
-            await this.simulateTyping(response);
+          // Always try to call the real AI first
+          try {
+            console.log('Attempting to call OpenAI with message:', userMessage);
+            const aiResponse = await this.callOpenAI(userMessage);
+            console.log('Got AI response:', aiResponse);
+            await this.simulateTyping(aiResponse);
             
             // After AI response, offer the file if they specifically asked about scripts
-            if (userMessage.toLowerCase().includes('script')) {
+            if (hasScriptKeyword && userMessage.toLowerCase().includes('script')) {
               setTimeout(async () => {
                 await this.simulateTyping("Here's our complete scripts collection! 📁", () => {
                   setTimeout(() => {
@@ -1037,17 +1100,11 @@ function app() {
                     this.scrollToBottom();
                   }, 500);
                 });
-              }, 1000);
+              }, 1500);
             }
-            return;
-          }
-          
-          // For all other messages, use AI with better context
-          try {
-            const aiResponse = await this.callOpenAI(userMessage);
-            await this.simulateTyping(aiResponse);
           } catch (error) {
-            console.error('Error getting AI response:', error);
+            console.error('Error in handleSendMessage:', error);
+            this.lastError = error.message;
             await this.simulateTyping(this.getFallbackResponse(userMessage));
           }
         }
