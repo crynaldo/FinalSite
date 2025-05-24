@@ -244,6 +244,12 @@
       min-height: 60px;
       max-height: 200px;
     }
+
+    /* API Key Modal */
+    .modal-backdrop {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
   </style>
   <script>
     tailwind.config = {
@@ -269,6 +275,42 @@
       <div class="bg-blur-1"></div>
       <div class="bg-blur-2"></div>
       <div class="bg-blur-3"></div>
+    </div>
+
+    <!-- API Key Setup Modal -->
+    <div x-show="showApiKeyModal" x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" 
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 bg-black/50 modal-backdrop z-50 flex items-center justify-center">
+      <div x-show="showApiKeyModal" x-transition:enter="transition ease-out duration-200"
+           x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100"
+           x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" 
+           x-transition:leave-end="opacity-0 scale-90"
+           class="bg-black/90 border border-white/10 rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
+        <h3 class="text-xl font-medium text-white mb-4">🤖 Enable AI Chat</h3>
+        <p class="text-white/70 mb-4">To enable AI responses, please enter your OpenAI API key:</p>
+        
+        <input x-model="tempApiKey" type="password" placeholder="sk-..." 
+               class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-violet-500 mb-4">
+        
+        <div class="text-xs text-white/50 mb-4">
+          <p>• Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank" class="text-violet-400 hover:text-violet-300">OpenAI Platform</a></p>
+          <p>• Your key is stored locally and never shared</p>
+          <p>• You can change it anytime in settings</p>
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <button @click="skipApiKey" 
+                  class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm transition-colors">
+            Skip (Demo Mode)
+          </button>
+          <button @click="saveApiKey" 
+                  class="px-4 py-2 bg-violet-500 hover:bg-violet-600 text-white rounded-lg text-sm transition-colors">
+            Save & Continue
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Loading screen -->
@@ -301,7 +343,11 @@
             <div class="inline-block gradient-border" style="animation: fadeIn 0.5s ease-out 0.2s both;">
               <h1 class="text-3xl font-medium tracking-tight text-gradient pb-1">Final Site</h1>
             </div>
-            <p class="text-sm text-white/40" style="animation: fadeIn 0.5s ease-out 0.3s both;">Type a command or ask a question</p>
+            <p class="text-sm text-white/40" style="animation: fadeIn 0.5s ease-out 0.3s both;">
+              Chat with Zap, our AI assistant
+              <span x-show="!apiKey" class="text-violet-400">(Demo Mode)</span>
+              <span x-show="apiKey" class="text-green-400">(AI Enabled)</span>
+            </p>
           </div>
 
           <!-- Messages Container -->
@@ -397,7 +443,7 @@
                           @keydown="handleKeyDown"
                           @focus="inputFocused = true"
                           @blur="inputFocused = false"
-                          placeholder="Ask zap a question..."
+                          placeholder="Ask zap anything..."
                           class="auto-resize-textarea w-full px-4 py-3 resize-none bg-transparent border-none text-white/90 text-sm focus:outline-none placeholder:text-white/20 min-h-[60px]"></textarea>
               </div>
             </div>
@@ -437,6 +483,21 @@
                         class="p-2 text-white/40 hover:text-white/90 rounded-lg transition-colors relative group">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path>
+                  </svg>
+                  <span class="absolute inset-0 bg-white/[0.05] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                </button>
+                <button @click="showApiKeyModal = true" 
+                        class="p-2 text-white/40 hover:text-white/90 rounded-lg transition-colors relative group">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6"></path>
+                    <path d="m15.5 3.5-1.5 1.5"></path>
+                    <path d="m10 12-1.5 1.5"></path>
+                    <path d="m15.5 20.5-1.5-1.5"></path>
+                    <path d="m4 12 1.5-1.5"></path>
+                    <path d="m8.5 3.5 1.5 1.5"></path>
+                    <path d="m8.5 20.5 1.5-1.5"></path>
+                    <path d="m20.5 8.5-1.5 1.5"></path>
                   </svg>
                   <span class="absolute inset-0 bg-white/[0.05] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></span>
                 </button>
@@ -606,8 +667,41 @@
   const SCRIPTS_FILE_CONFIG = {
     fileName: "All_Scripts.zip",
     fileType: "ZIP file",
-    filePath: "./All_Scripts.zip", // GitHub Pages path (root level)
+    filePath: "./All_Scripts.zip",
     fileSize: "2.4 MB"
+  };
+
+  // AI Configuration
+  const AI_CONFIG = {
+    systemPrompt: `You are Zap, the official AI assistant for Final Site, a Discord server community focused on providing free scripts and support to users. 
+
+Your personality:
+- Friendly, helpful, and enthusiastic
+- Knowledgeable about scripting, Discord communities, and tech
+- Always promote the Discord server when relevant
+- Use emojis occasionally but not excessively
+- Keep responses concise but informative
+
+Key information about Final Site:
+- Discord server: https://discord.gg/nn9Gzppq6V
+- Provides free scripts to users
+- Has active staff for support
+- Community-focused and welcoming
+
+Special commands you should handle:
+- When users ask about "scripts" - offer the downloadable file and mention it's free
+- When users ask for "help" - direct them to Discord or the hints button
+- When users say "hi" or greet you - introduce yourself as Zap and ask if they want to know more about Final Site
+
+Always be helpful and try to guide users toward the Discord community when appropriate.`,
+    
+    fallbackResponses: [
+      "I'm here to help! Feel free to ask me anything about Final Site or our Discord community. 🚀",
+      "Hey there! I'm Zap, your AI assistant. What can I help you with today?",
+      "Welcome to Final Site! I'm here to assist you. Check out our Discord server for more support: https://discord.gg/nn9Gzppq6V",
+      "I'm currently in demo mode. For the full AI experience, please add your OpenAI API key in the settings! ⚙️",
+      "That's an interesting question! Our Discord community might have more insights: https://discord.gg/nn9Gzppq6V"
+    ]
   };
 
   function app() {
@@ -629,6 +723,9 @@
           awaitingResponse: false
         },
         showDiscordConfirm: false,
+        showApiKeyModal: false,
+        apiKey: '',
+        tempApiKey: '',
         
         commandSuggestions: [
           {
@@ -664,6 +761,9 @@
         ],
         
         init() {
+          // Load saved API key
+          this.apiKey = localStorage.getItem('openai_api_key') || '';
+          
           // Track mouse position
           document.addEventListener('mousemove', (e) => {
             this.mousePosition = { x: e.clientX, y: e.clientY };
@@ -675,7 +775,75 @@
           // Simulate loading time
           setTimeout(() => {
             this.loading = false;
+            // Show API key modal if no key is set
+            if (!this.apiKey) {
+              setTimeout(() => {
+                this.showApiKeyModal = true;
+              }, 1000);
+            }
           }, 2000);
+        },
+
+        // API Key Management
+        saveApiKey() {
+          if (this.tempApiKey.trim()) {
+            this.apiKey = this.tempApiKey.trim();
+            localStorage.setItem('openai_api_key', this.apiKey);
+          }
+          this.showApiKeyModal = false;
+          this.tempApiKey = '';
+        },
+
+        skipApiKey() {
+          this.showApiKeyModal = false;
+          this.tempApiKey = '';
+        },
+
+        // AI Integration
+        async callOpenAI(userMessage) {
+          if (!this.apiKey) {
+            return this.getFallbackResponse();
+          }
+
+          try {
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.apiKey}`
+              },
+              body: JSON.stringify({
+                model: 'gpt-3.5-turbo',
+                messages: [
+                  {
+                    role: 'system',
+                    content: AI_CONFIG.systemPrompt
+                  },
+                  {
+                    role: 'user',
+                    content: userMessage
+                  }
+                ],
+                max_tokens: 500,
+                temperature: 0.7
+              })
+            });
+
+            if (!response.ok) {
+              throw new Error(`API Error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.choices[0].message.content;
+          } catch (error) {
+            console.error('OpenAI API Error:', error);
+            return this.getFallbackResponse();
+          }
+        },
+
+        getFallbackResponse() {
+          const responses = AI_CONFIG.fallbackResponses;
+          return responses[Math.floor(Math.random() * responses.length)];
         },
         
         setupIdleTimer() {
@@ -754,8 +922,12 @@
           }
         },
         
-        simulateTyping(message, callback, isFile = false, fileName = "", fileType = "", fileSize = "") {
+        async simulateTyping(message, callback, isFile = false, fileName = "", fileType = "", fileSize = "") {
           this.isTyping = true;
+          
+          // Simulate realistic typing delay based on message length
+          const typingDelay = Math.min(Math.max(message.length * 30, 1000), 3000);
+          
           setTimeout(() => {
             this.isTyping = false;
             const newMessage = {
@@ -771,69 +943,68 @@
             this.messages.push(newMessage);
             this.scrollToBottom();
             if (callback) callback();
-          }, 1500);
+          }, typingDelay);
         },
         
-        handleSendMessage() {
+        async handleSendMessage() {
           if (this.value.trim()) {
+            const userMessage = this.value.trim();
+            
             // Add user message
-            const userMessage = {
+            const userMsg = {
               id: Date.now().toString(),
-              content: this.value.trim(),
+              content: userMessage,
               sender: "user",
               timestamp: new Date()
             };
-            this.messages.push(userMessage);
+            this.messages.push(userMsg);
             this.scrollToBottom();
             
-            // Check for special commands
-            if (this.value.trim().toLowerCase() === "/discord") {
-              this.showDiscordConfirm = true;
-            }
-            // Check if message is "Hi"
-            else if (this.value.trim().toLowerCase() === "hi") {
-              this.chatState = {
-                status: "greeting",
-                awaitingResponse: true
-              };
-              this.simulateTyping(
-                "Hello, my name is Zap, Final Site's official AI! Do you want more information about me and us?",
-                () => {
-                  this.chatState.awaitingResponse = false;
-                }
-              );
-            }
-            // Check if message is "Scripts"
-            else if (this.value.trim().toLowerCase() === "scripts") {
-              this.simulateTyping("Here are our scripts. You can download them for free!", () => {
-                // After the message, send a file
-                setTimeout(() => {
-                  const fileMessage = {
-                    id: Date.now().toString(),
-                    content: SCRIPTS_FILE_CONFIG.fileName,
-                    sender: "ai",
-                    timestamp: new Date(),
-                    isFile: true,
-                    fileName: SCRIPTS_FILE_CONFIG.fileName,
-                    fileType: SCRIPTS_FILE_CONFIG.fileType,
-                    fileSize: SCRIPTS_FILE_CONFIG.fileSize
-                  };
-                  this.messages.push(fileMessage);
-                  this.scrollToBottom();
-                }, 500);
-              });
-            }
-            // Check if message is "Help"
-            else if (this.value.trim().toLowerCase() === "help") {
-              this.simulateTyping(
-                "If you need help, simply go to our discord server or just press on the hints button! Feel free to directly join our discord server by saying /discord in the chat!"
-              );
-            } else {
-              this.simulateTyping("I'm here to help! Ask me anything or check the Hints button for suggestions.");
-            }
-            
+            // Clear input
             this.value = "";
             this.adjustTextareaHeight();
+            
+            // Handle special commands first
+            if (userMessage.toLowerCase() === "/discord") {
+              this.showDiscordConfirm = true;
+              return;
+            }
+            
+            // Check for special keywords that should trigger file downloads
+            if (userMessage.toLowerCase().includes('script')) {
+              const response = await this.callOpenAI(userMessage);
+              await this.simulateTyping(response);
+              
+              // After AI response, offer the file
+              setTimeout(async () => {
+                await this.simulateTyping("Here's our scripts collection for you to download! 📁", () => {
+                  setTimeout(() => {
+                    const fileMessage = {
+                      id: Date.now().toString(),
+                      content: SCRIPTS_FILE_CONFIG.fileName,
+                      sender: "ai",
+                      timestamp: new Date(),
+                      isFile: true,
+                      fileName: SCRIPTS_FILE_CONFIG.fileName,
+                      fileType: SCRIPTS_FILE_CONFIG.fileType,
+                      fileSize: SCRIPTS_FILE_CONFIG.fileSize
+                    };
+                    this.messages.push(fileMessage);
+                    this.scrollToBottom();
+                  }, 500);
+                });
+              }, 1000);
+              return;
+            }
+            
+            // For all other messages, use AI
+            try {
+              const aiResponse = await this.callOpenAI(userMessage);
+              await this.simulateTyping(aiResponse);
+            } catch (error) {
+              console.error('Error getting AI response:', error);
+              await this.simulateTyping(this.getFallbackResponse());
+            }
           }
         },
         
@@ -844,7 +1015,7 @@
           };
           
           this.simulateTyping(
-            "Okay. We are a discord server looking for a giveaway of scripts for FREE! That's right, you don't have to pay for our scripts, you can use them whenever you want! Our staff is active for your support. If you're not in the discord server, join already! https://discord.gg/nn9Gzppq6V",
+            "Awesome! 🎉 Final Site is a Discord server community where we provide FREE scripts to everyone! That's right - completely free, no payment required. Our active staff is always ready to help you out. If you haven't joined our Discord server yet, you definitely should! https://discord.gg/nn9Gzppq6V",
             () => {
               this.chatState.awaitingResponse = false;
             }
@@ -858,7 +1029,7 @@
           };
           
           this.simulateTyping(
-            "Alright, if you need anything else, feel free to check the Hints button on the bottom left corner of your device!",
+            "No worries! 😊 I'm here whenever you need help. Feel free to check out the Hints button in the bottom left corner, or just ask me anything about Final Site and our community!",
             () => {
               this.chatState.awaitingResponse = false;
             }
@@ -872,7 +1043,7 @@
         
         handleDiscordNo() {
           this.showDiscordConfirm = false;
-          this.simulateTyping("No problem! You can always join our Discord server later by typing /discord.");
+          this.simulateTyping("No problem! You can always join our Discord server later by typing /discord or just asking me about it. I'm here to help! 🤖");
         },
         
         handleAttachFile() {
@@ -910,12 +1081,11 @@
           this.adjustTextareaHeight();
         },
         
-        // Updated download function for GitHub Pages
         handleDownloadFile(fileName) {
           const link = document.createElement('a');
           link.href = SCRIPTS_FILE_CONFIG.filePath;
           link.download = fileName;
-          link.target = '_blank'; // Open in new tab as fallback
+          link.target = '_blank';
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
