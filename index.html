@@ -1,983 +1,1027 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Final Site</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Alpine.js for reactivity -->
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <style>
-    /* Base styles */
-    body {
-      background-color: black;
-      color: white;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Final Site</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Alpine.js for reactivity -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<style>
+  /* Base styles */
+  body {
+    background-color: black;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
 
-    /* Animations */
-    @keyframes pulse {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 0.8; }
-    }
+  /* Animations */
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+  }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
 
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
 
-    @keyframes slideDown {
-      from { transform: translateY(-20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
+  @keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
 
-    @keyframes ripple {
-      0% { transform: scale(0.5); opacity: 0.6; }
-      100% { transform: scale(2); opacity: 0; }
-    }
+  @keyframes ripple {
+    0% { transform: scale(0.5); opacity: 0.6; }
+    100% { transform: scale(2); opacity: 0; }
+  }
 
-    /* Background effects */
-    .bg-blur-1 {
-      position: absolute;
-      top: 0;
-      left: 25%;
-      width: 24rem;
-      height: 24rem;
-      background-color: rgba(139, 92, 246, 0.1);
-      border-radius: 9999px;
-      mix-blend-mode: normal;
-      filter: blur(128px);
-      animation: pulse 8s infinite;
-    }
+  /* Background effects */
+  .bg-blur-1 {
+    position: absolute;
+    top: 0;
+    left: 25%;
+    width: 24rem;
+    height: 24rem;
+    background-color: rgba(139, 92, 246, 0.1);
+    border-radius: 9999px;
+    mix-blend-mode: normal;
+    filter: blur(128px);
+    animation: pulse 8s infinite;
+  }
 
-    .bg-blur-2 {
-      position: absolute;
-      bottom: 0;
-      right: 25%;
-      width: 24rem;
-      height: 24rem;
-      background-color: rgba(79, 70, 229, 0.1);
-      border-radius: 9999px;
-      mix-blend-mode: normal;
-      filter: blur(128px);
-      animation: pulse 8s infinite 0.7s;
-    }
+  .bg-blur-2 {
+    position: absolute;
+    bottom: 0;
+    right: 25%;
+    width: 24rem;
+    height: 24rem;
+    background-color: rgba(79, 70, 229, 0.1);
+    border-radius: 9999px;
+    mix-blend-mode: normal;
+    filter: blur(128px);
+    animation: pulse 8s infinite 0.7s;
+  }
 
-    .bg-blur-3 {
-      position: absolute;
-      top: 25%;
-      right: 33%;
-      width: 16rem;
-      height: 16rem;
-      background-color: rgba(217, 70, 239, 0.1);
-      border-radius: 9999px;
-      mix-blend-mode: normal;
-      filter: blur(96px);
-      animation: pulse 8s infinite 1s;
-    }
+  .bg-blur-3 {
+    position: absolute;
+    top: 25%;
+    right: 33%;
+    width: 16rem;
+    height: 16rem;
+    background-color: rgba(217, 70, 239, 0.1);
+    border-radius: 9999px;
+    mix-blend-mode: normal;
+    filter: blur(96px);
+    animation: pulse 8s infinite 1s;
+  }
 
-    /* Loading spinner */
-    .loading-spinner {
-      width: 4rem;
-      height: 4rem;
-      position: relative;
-      margin-bottom: 1rem;
-    }
+  /* Loading spinner */
+  .loading-spinner {
+    width: 4rem;
+    height: 4rem;
+    position: relative;
+    margin-bottom: 1rem;
+  }
 
-    .loading-spinner-outer {
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      border: 2px solid rgba(139, 92, 246, 0.3);
-      animation: pulse 2s infinite alternate;
-    }
+  .loading-spinner-outer {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    animation: pulse 2s infinite alternate;
+  }
 
-    .loading-spinner-inner {
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      border-top: 2px solid rgba(139, 92, 246, 1);
-      border-right: 2px solid transparent;
-      border-bottom: 2px solid transparent;
-      border-left: 2px solid transparent;
-      animation: spin 1s linear infinite;
-    }
+  .loading-spinner-inner {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border-top: 2px solid rgba(139, 92, 246, 1);
+    border-right: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    border-left: 2px solid transparent;
+    animation: spin 1s linear infinite;
+  }
 
-    /* Typing dots */
-    .typing-dots {
-      display: flex;
-      align-items: center;
-      margin-left: 0.25rem;
-    }
+  /* Typing dots */
+  .typing-dots {
+    display: flex;
+    align-items: center;
+    margin-left: 0.25rem;
+  }
 
-    .typing-dot {
-      width: 0.375rem;
-      height: 0.375rem;
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 9999px;
-      margin: 0 0.125rem;
-      animation: typingPulse 1.2s infinite ease-in-out;
-      box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
-    }
+  .typing-dot {
+    width: 0.375rem;
+    height: 0.375rem;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 9999px;
+    margin: 0 0.125rem;
+    animation: typingPulse 1.2s infinite ease-in-out;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+  }
 
-    .typing-dot:nth-child(1) {
-      animation-delay: 0s;
-    }
+  .typing-dot:nth-child(1) {
+    animation-delay: 0s;
+  }
 
-    .typing-dot:nth-child(2) {
-      animation-delay: 0.15s;
-    }
+  .typing-dot:nth-child(2) {
+    animation-delay: 0.15s;
+  }
 
-    .typing-dot:nth-child(3) {
-      animation-delay: 0.3s;
-    }
+  .typing-dot:nth-child(3) {
+    animation-delay: 0.3s;
+  }
 
-    @keyframes typingPulse {
-      0%, 100% {
-        opacity: 0.3;
-        transform: scale(0.85);
-      }
-      50% {
-        opacity: 0.9;
-        transform: scale(1.1);
-      }
+  @keyframes typingPulse {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(0.85);
     }
+    50% {
+      opacity: 0.9;
+      transform: scale(1.1);
+    }
+  }
 
-    /* Scrollbar styling */
-    .custom-scrollbar {
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-    }
+  /* Scrollbar styling */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  }
 
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-    }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
 
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: transparent;
-    }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background-color: rgba(255, 255, 255, 0.2);
-      border-radius: 3px;
-    }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
 
-    /* Transitions */
-    .fade-enter {
-      opacity: 0;
-    }
+  /* Transitions */
+  .fade-enter {
+    opacity: 0;
+  }
 
-    .fade-enter-active {
-      opacity: 1;
-      transition: opacity 300ms;
-    }
+  .fade-enter-active {
+    opacity: 1;
+    transition: opacity 300ms;
+  }
 
-    .fade-exit {
-      opacity: 1;
-    }
+  .fade-exit {
+    opacity: 1;
+  }
 
-    .fade-exit-active {
-      opacity: 0;
-      transition: opacity 300ms;
-    }
+  .fade-exit-active {
+    opacity: 0;
+    transition: opacity 300ms;
+  }
 
-    /* Utility classes */
-    .text-gradient {
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.4));
-    }
+  /* Utility classes */
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.4));
+  }
 
-    .gradient-border {
-      position: relative;
-    }
+  .gradient-border {
+    position: relative;
+  }
 
-    .gradient-border::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
-    }
+  .gradient-border::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+  }
 
-    .backdrop-blur {
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-    }
+  .backdrop-blur {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
 
-    /* Animation for hint arrow */
-    @keyframes arrowFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
+  /* Animation for hint arrow */
+  @keyframes arrowFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
 
-    .arrow-float {
-      animation: arrowFloat 1.5s infinite ease-in-out;
-    }
+  .arrow-float {
+    animation: arrowFloat 1.5s infinite ease-in-out;
+  }
 
-    /* Textarea auto-resize */
-    .auto-resize-textarea {
-      resize: none;
-      overflow: hidden;
-      min-height: 60px;
-      max-height: 200px;
-    }
+  /* Textarea auto-resize */
+  .auto-resize-textarea {
+    resize: none;
+    overflow: hidden;
+    min-height: 60px;
+    max-height: 200px;
+  }
 
-    /* API Key Modal */
-    .modal-backdrop {
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-    }
-  </style>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            violet: {
-              300: '#a78bfa',
-              400: '#9061f9',
-              500: '#8b5cf6',
-              600: '#7c3aed'
-            }
+  /* API Key Modal */
+  .modal-backdrop {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+</style>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          violet: {
+            300: '#a78bfa',
+            400: '#9061f9',
+            500: '#8b5cf6',
+            600: '#7c3aed'
           }
         }
       }
     }
-  </script>
+  }
+</script>
 </head>
 <body>
-  <div x-data="app()" x-init="init()" class="min-h-screen relative overflow-hidden">
-    <!-- Background effects -->
-    <div class="absolute inset-0 w-full h-full overflow-hidden">
-      <div class="bg-blur-1"></div>
-      <div class="bg-blur-2"></div>
-      <div class="bg-blur-3"></div>
-    </div>
+<div x-data="app()" x-init="init()" class="min-h-screen relative overflow-hidden">
+  <!-- Background effects -->
+  <div class="absolute inset-0 w-full h-full overflow-hidden">
+    <div class="bg-blur-1"></div>
+    <div class="bg-blur-2"></div>
+    <div class="bg-blur-3"></div>
+  </div>
 
-    <!-- API Key Setup Modal -->
+  <!-- API Key Setup Modal -->
+  <div x-show="showApiKeyModal" x-transition:enter="transition ease-out duration-200"
+       x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+       x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" 
+       x-transition:leave-end="opacity-0"
+       class="fixed inset-0 bg-black/50 modal-backdrop z-50 flex items-center justify-center">
     <div x-show="showApiKeyModal" x-transition:enter="transition ease-out duration-200"
-         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" 
-         x-transition:leave-end="opacity-0"
-         class="fixed inset-0 bg-black/50 modal-backdrop z-50 flex items-center justify-center">
-      <div x-show="showApiKeyModal" x-transition:enter="transition ease-out duration-200"
-           x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100"
-           x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" 
-           x-transition:leave-end="opacity-0 scale-90"
-           class="bg-black/90 border border-white/10 rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
-        <h3 class="text-xl font-medium text-white mb-4">🤖 Enable AI Chat</h3>
-        <p class="text-white/70 mb-4">To enable AI responses, please enter your OpenAI API key:</p>
-        
-        <input x-model="tempApiKey" type="password" placeholder="sk-..." 
-               class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-violet-500 mb-4">
-        
-        <div class="text-xs text-white/50 mb-4">
-          <p>• Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank" class="text-violet-400 hover:text-violet-300">OpenAI Platform</a></p>
-          <p>• Your key is stored locally and never shared</p>
-          <p>• You can change it anytime in settings</p>
-        </div>
-
-        <div class="flex justify-end gap-3">
-          <button @click="skipApiKey" 
-                  class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm transition-colors">
-            Skip (Demo Mode)
-          </button>
-          <button @click="saveApiKey" 
-                  class="px-4 py-2 bg-violet-500 hover:bg-violet-600 text-white rounded-lg text-sm transition-colors">
-            Save & Continue
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Loading screen -->
-    <div x-show="loading" x-transition:enter="transition ease-out duration-300" 
-         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100" 
-         x-transition:leave-end="opacity-0"
-         class="min-h-screen flex flex-col items-center justify-center bg-black text-white relative z-10">
-      <div class="relative z-10 flex flex-col items-center">
-        <h1 class="text-4xl font-bold mb-8 text-gradient" style="animation: pulse 2s infinite alternate;">Final Site</h1>
-        
-        <div class="loading-spinner mb-4">
-          <div class="loading-spinner-outer"></div>
-          <div class="loading-spinner-inner"></div>
-        </div>
-        
-        <p class="text-white/50 text-sm" style="animation: pulse 1.5s infinite alternate;">Loading...</p>
-      </div>
-    </div>
-
-    <!-- Main content -->
-    <div x-show="!loading" x-transition:enter="transition ease-out duration-500" 
-         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-         class="min-h-screen flex flex-col w-full items-center justify-center text-white p-6 relative">
+         x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" 
+         x-transition:leave-end="opacity-0 scale-90"
+         class="bg-black/90 border border-white/10 rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
+      <h3 class="text-xl font-medium text-white mb-4">🤖 Enable AI Chat</h3>
+      <p class="text-white/70 mb-4">To enable AI responses, please enter your OpenAI API key:</p>
       
-      <div class="w-full max-w-2xl mx-auto relative">
-        <div class="relative z-10 space-y-6" style="animation: slideUp 0.6s ease-out;">
-          <!-- Header -->
-          <div class="text-center space-y-3">
-            <div class="inline-block gradient-border" style="animation: fadeIn 0.5s ease-out 0.2s both;">
-              <h1 class="text-3xl font-medium tracking-tight text-gradient pb-1">Final Site</h1>
-            </div>
-            <p class="text-sm text-white/40" style="animation: fadeIn 0.5s ease-out 0.3s both;">
-              Chat with Zap, our AI assistant
-              <span x-show="!apiKey" class="text-violet-400">(Demo Mode)</span>
-              <span x-show="apiKey" class="text-green-400">(AI Enabled)</span>
-            </p>
+      <input x-model="tempApiKey" type="password" placeholder="sk-..." 
+             class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-violet-500 mb-4">
+      
+      <div class="text-xs text-white/50 mb-4">
+        <p>• Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank" class="text-violet-400 hover:text-violet-300">OpenAI Platform</a></p>
+        <p>• Your key is stored locally and never shared</p>
+        <p>• You can change it anytime in settings</p>
+      </div>
+
+      <div class="flex justify-end gap-3">
+        <button @click="skipApiKey" 
+                class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm transition-colors">
+          Skip (Demo Mode)
+        </button>
+        <button @click="saveApiKey" 
+                class="px-4 py-2 bg-violet-500 hover:bg-violet-600 text-white rounded-lg text-sm transition-colors">
+          Save & Continue
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading screen -->
+  <div x-show="loading" x-transition:enter="transition ease-out duration-300" 
+       x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+       x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100" 
+       x-transition:leave-end="opacity-0"
+       class="min-h-screen flex flex-col items-center justify-center bg-black text-white relative z-10">
+    <div class="relative z-10 flex flex-col items-center">
+      <h1 class="text-4xl font-bold mb-8 text-gradient" style="animation: pulse 2s infinite alternate;">Final Site</h1>
+      
+      <div class="loading-spinner mb-4">
+        <div class="loading-spinner-outer"></div>
+        <div class="loading-spinner-inner"></div>
+      </div>
+      
+      <p class="text-white/50 text-sm" style="animation: pulse 1.5s infinite alternate;">Loading...</p>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <div x-show="!loading" x-transition:enter="transition ease-out duration-500" 
+       x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+       class="min-h-screen flex flex-col w-full items-center justify-center text-white p-6 relative">
+    
+    <div class="w-full max-w-2xl mx-auto relative">
+      <div class="relative z-10 space-y-6" style="animation: slideUp 0.6s ease-out;">
+        <!-- Header -->
+        <div class="text-center space-y-3">
+          <div class="inline-block gradient-border" style="animation: fadeIn 0.5s ease-out 0.2s both;">
+            <h1 class="text-3xl font-medium tracking-tight text-gradient pb-1">Final Site</h1>
           </div>
+          <p class="text-sm text-white/40" style="animation: fadeIn 0.5s ease-out 0.3s both;">
+            Chat with Zap, our AI assistant
+            <span x-show="!apiKey" class="text-violet-400">(Demo Mode)</span>
+            <span x-show="apiKey" class="text-green-400">(AI Enabled)</span>
+          </p>
+        </div>
 
-          <!-- Messages Container -->
-          <div x-show="messages.length > 0" x-transition:enter="transition ease-out duration-300"
-               x-transition:enter-start="opacity-0 transform translate-y-4" x-transition:enter-end="opacity-100 transform translate-y-0"
-               class="bg-white/[0.02] rounded-lg border border-white/[0.05] shadow-lg overflow-hidden">
-            <div class="p-4 max-h-[400px] overflow-y-auto custom-scrollbar" id="messages-container">
-              <div class="space-y-4">
-                <template x-for="(message, index) in messages" :key="message.id">
-                  <div :class="message.sender === 'user' ? 'flex flex-col items-end' : 'flex flex-col items-start'"
-                       style="animation: slideUp 0.3s ease-out both;">
-                    
-                    <!-- File message -->
-                    <template x-if="message.isFile">
-                      <div class="bg-white/[0.05] border border-white/10 text-white/90 px-4 py-3 rounded-lg flex items-center gap-3">
-                        <div class="bg-violet-500/20 p-2 rounded-md">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-violet-300">
-                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                          </svg>
-                        </div>
-                        <div>
-                          <p class="text-sm font-medium" x-text="message.fileName"></p>
-                          <p class="text-xs text-white/50" x-text="message.fileType + (message.fileSize ? ' • ' + message.fileSize : '')"></p>
-                        </div>
-                        <button @click="handleDownloadFile(message.fileName)" 
-                                class="ml-4 bg-white/10 hover:bg-white/20 p-2 rounded-md transition-colors">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7 10 12 15 17 10"></polyline>
-                            <line x1="12" y1="15" x2="12" y2="3"></line>
-                          </svg>
-                        </button>
+        <!-- Messages Container -->
+        <div x-show="messages.length > 0" x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform translate-y-4" x-transition:enter-end="opacity-100 transform translate-y-0"
+             class="bg-white/[0.02] rounded-lg border border-white/[0.05] shadow-lg overflow-hidden">
+          <div class="p-4 max-h-[400px] overflow-y-auto custom-scrollbar" id="messages-container">
+            <div class="space-y-4">
+              <template x-for="(message, index) in messages" :key="message.id">
+                <div :class="message.sender === 'user' ? 'flex flex-col items-end' : 'flex flex-col items-start'"
+                     style="animation: slideUp 0.3s ease-out both;">
+                  
+                  <!-- File message -->
+                  <template x-if="message.isFile">
+                    <div class="bg-white/[0.05] border border-white/10 text-white/90 px-4 py-3 rounded-lg flex items-center gap-3">
+                      <div class="bg-violet-500/20 p-2 rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-violet-300">
+                          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                          <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
                       </div>
-                    </template>
-                    
-                    <!-- Text message -->
-                    <template x-if="!message.isFile">
-                      <div :class="message.sender === 'user' ? 
-                                  'bg-violet-500/20 text-white ml-auto px-4 py-2 rounded-lg max-w-[80%]' : 
-                                  'bg-white/[0.05] border border-white/10 text-white/90 px-4 py-2 rounded-lg max-w-[80%]'">
-                        <div class="text-sm whitespace-pre-wrap break-words" x-text="message.content"></div>
+                      <div>
+                        <p class="text-sm font-medium" x-text="message.fileName"></p>
+                        <p class="text-xs text-white/50" x-text="message.fileType + (message.fileSize ? ' • ' + message.fileSize : '')"></p>
                       </div>
-                    </template>
-                  </div>
-                </template>
-
-                <!-- Y/N Buttons for greeting -->
-                <div x-show="chatState.status === 'greeting' && !chatState.awaitingResponse" 
-                     class="flex justify-center gap-4 mt-2" style="animation: slideUp 0.3s ease-out 0.2s both;">
-                  <button @click="handleYesResponse" 
-                          class="px-6 py-2 bg-violet-500/80 hover:bg-violet-500 text-white rounded-lg font-medium text-sm transition-colors shadow-lg">
-                    Y
-                  </button>
-                  <button @click="handleNoResponse" 
-                          class="px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg font-medium text-sm transition-colors shadow-lg">
-                    N
-                  </button>
+                      <button @click="handleDownloadFile(message.fileName)" 
+                              class="ml-4 bg-white/10 hover:bg-white/20 p-2 rounded-md transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                          <polyline points="7 10 12 15 17 10"></polyline>
+                          <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                      </button>
+                    </div>
+                  </template>
+                  
+                  <!-- Text message -->
+                  <template x-if="!message.isFile">
+                    <div :class="message.sender === 'user' ? 
+                                'bg-violet-500/20 text-white ml-auto px-4 py-2 rounded-lg max-w-[80%]' : 
+                                'bg-white/[0.05] border border-white/10 text-white/90 px-4 py-2 rounded-lg max-w-[80%]'">
+                      <div class="text-sm whitespace-pre-wrap break-words" x-text="message.content"></div>
+                    </div>
+                  </template>
                 </div>
+              </template>
+
+              <!-- Y/N Buttons for greeting -->
+              <div x-show="chatState.status === 'greeting' && !chatState.awaitingResponse" 
+                   class="flex justify-center gap-4 mt-2" style="animation: slideUp 0.3s ease-out 0.2s both;">
+                <button @click="handleYesResponse" 
+                        class="px-6 py-2 bg-violet-500/80 hover:bg-violet-500 text-white rounded-lg font-medium text-sm transition-colors shadow-lg">
+                  Y
+                </button>
+                <button @click="handleNoResponse" 
+                        class="px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg font-medium text-sm transition-colors shadow-lg">
+                  N
+                </button>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- Input area -->
-          <div class="relative backdrop-blur bg-white/[0.02] rounded-2xl border border-white/[0.05] shadow-2xl" 
-               style="animation: fadeIn 0.5s ease-out 0.1s both; transform: scale(0.98); transition: transform 0.3s ease-out;"
-               @mouseenter="$el.style.transform = 'scale(1)'">
-            
-            <!-- Command palette -->
-            <div x-show="showCommandPalette" x-transition:enter="transition ease-out duration-150"
-                 x-transition:enter-start="opacity-0 transform translate-y-5" x-transition:enter-end="opacity-100 transform translate-y-0"
-                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" 
-                 x-transition:leave-end="opacity-0 transform translate-y-5"
-                 class="absolute left-4 right-4 bottom-full mb-2 backdrop-blur bg-black/90 rounded-lg z-50 shadow-lg border border-white/10 overflow-hidden">
-              <div class="py-1 bg-black/95">
-                <template x-for="(suggestion, index) in commandSuggestions" :key="suggestion.prefix">
-                  <div @click="selectCommandSuggestion(index)" 
-                       :class="activeSuggestion === index ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'"
-                       class="flex items-center gap-2 px-3 py-2 text-xs transition-colors cursor-pointer">
-                    <div class="w-5 h-5 flex items-center justify-center text-white/60" x-html="suggestion.icon"></div>
-                    <div class="font-medium" x-text="suggestion.label"></div>
-                    <div class="text-white/40 text-xs ml-1" x-text="suggestion.prefix"></div>
-                  </div>
-                </template>
-              </div>
-            </div>
-
-            <div class="p-4">
-              <div class="relative">
-                <textarea id="chat-input" 
-                          x-model="value" 
-                          @input="adjustTextareaHeight"
-                          @keydown="handleKeyDown"
-                          @focus="inputFocused = true"
-                          @blur="inputFocused = false"
-                          placeholder="Ask zap anything..."
-                          class="auto-resize-textarea w-full px-4 py-3 resize-none bg-transparent border-none text-white/90 text-sm focus:outline-none placeholder:text-white/20 min-h-[60px]"></textarea>
-              </div>
-            </div>
-
-            <!-- Attachments -->
-            <div x-show="attachments.length > 0" x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-[200px]"
-                 x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 max-h-[200px]" 
-                 x-transition:leave-end="opacity-0 max-h-0"
-                 class="px-4 pb-3 flex gap-2 flex-wrap">
-              <template x-for="(file, index) in attachments" :key="index">
-                <div class="flex items-center gap-2 text-xs bg-white/[0.03] py-1.5 px-3 rounded-lg text-white/70"
-                     style="animation: fadeIn 0.3s ease-out both;">
-                  <span x-text="file"></span>
-                  <button @click="removeAttachment(index)" class="text-white/40 hover:text-white transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
+        <!-- Input area -->
+        <div class="relative backdrop-blur bg-white/[0.02] rounded-2xl border border-white/[0.05] shadow-2xl" 
+             style="animation: fadeIn 0.5s ease-out 0.1s both; transform: scale(0.98); transition: transform 0.3s ease-out;"
+             @mouseenter="$el.style.transform = 'scale(1)'">
+          
+          <!-- Command palette -->
+          <div x-show="showCommandPalette" x-transition:enter="transition ease-out duration-150"
+               x-transition:enter-start="opacity-0 transform translate-y-5" x-transition:enter-end="opacity-100 transform translate-y-0"
+               x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" 
+               x-transition:leave-end="opacity-0 transform translate-y-5"
+               class="absolute left-4 right-4 bottom-full mb-2 backdrop-blur bg-black/90 rounded-lg z-50 shadow-lg border border-white/10 overflow-hidden">
+            <div class="py-1 bg-black/95">
+              <template x-for="(suggestion, index) in commandSuggestions" :key="suggestion.prefix">
+                <div @click="selectCommandSuggestion(index)" 
+                     :class="activeSuggestion === index ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5'"
+                     class="flex items-center gap-2 px-3 py-2 text-xs transition-colors cursor-pointer">
+                  <div class="w-5 h-5 flex items-center justify-center text-white/60" x-html="suggestion.icon"></div>
+                  <div class="font-medium" x-text="suggestion.label"></div>
+                  <div class="text-white/40 text-xs ml-1" x-text="suggestion.prefix"></div>
                 </div>
               </template>
             </div>
+          </div>
 
-            <!-- Input controls -->
-            <div class="p-4 border-t border-white/[0.05] flex items-center justify-between gap-4">
-              <div class="flex items-center gap-3">
-                <button @click="handleAttachFile" 
-                        class="p-2 text-white/40 hover:text-white/90 rounded-lg transition-colors relative group">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+          <div class="p-4">
+            <div class="relative">
+              <textarea id="chat-input" 
+                        x-model="value" 
+                        @input="adjustTextareaHeight"
+                        @keydown="handleKeyDown"
+                        @focus="inputFocused = true"
+                        @blur="inputFocused = false"
+                        placeholder="Ask zap anything..."
+                        class="auto-resize-textarea w-full px-4 py-3 resize-none bg-transparent border-none text-white/90 text-sm focus:outline-none placeholder:text-white/20 min-h-[60px]"></textarea>
+            </div>
+          </div>
+
+          <!-- Attachments -->
+          <div x-show="attachments.length > 0" x-transition:enter="transition ease-out duration-200"
+               x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-[200px]"
+               x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 max-h-[200px]" 
+               x-transition:leave-end="opacity-0 max-h-0"
+               class="px-4 pb-3 flex gap-2 flex-wrap">
+            <template x-for="(file, index) in attachments" :key="index">
+              <div class="flex items-center gap-2 text-xs bg-white/[0.03] py-1.5 px-3 rounded-lg text-white/70"
+                   style="animation: fadeIn 0.3s ease-out both;">
+                <span x-text="file"></span>
+                <button @click="removeAttachment(index)" class="text-white/40 hover:text-white transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
                   </svg>
-                  <span class="absolute inset-0 bg-white/[0.05] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                </button>
-                <button @click="toggleCommandPalette" data-command-button
-                        :class="showCommandPalette ? 'bg-white/10 text-white/90' : ''"
-                        class="p-2 text-white/40 hover:text-white/90 rounded-lg transition-colors relative group">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path>
-                  </svg>
-                  <span class="absolute inset-0 bg-white/[0.05] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                </button>
-                <button @click="showApiKeyModal = true" 
-                        class="p-2 text-white/40 hover:text-white/90 rounded-lg transition-colors relative group">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <path d="M12 1v6m0 6v6"></path>
-                    <path d="m15.5 3.5-1.5 1.5"></path>
-                    <path d="m10 12-1.5 1.5"></path>
-                    <path d="m15.5 20.5-1.5-1.5"></path>
-                    <path d="m4 12 1.5-1.5"></path>
-                    <path d="m8.5 3.5 1.5 1.5"></path>
-                    <path d="m8.5 20.5 1.5-1.5"></path>
-                    <path d="m20.5 8.5-1.5 1.5"></path>
-                  </svg>
-                  <span class="absolute inset-0 bg-white/[0.05] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></span>
                 </button>
               </div>
-
-              <button @click="handleSendMessage" 
-                      :disabled="isTyping || !value.trim()"
-                      :class="value.trim() ? 'bg-white text-[#0A0A0B] shadow-lg shadow-white/10' : 'bg-white/[0.05] text-white/40'"
-                      class="px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
-                <template x-if="isTyping">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-spin">
-                    <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
-                  </svg>
-                </template>
-                <template x-if="!isTyping">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m22 2-7 20-4-9-9-4Z"></path>
-                    <path d="M22 2 11 13"></path>
-                  </svg>
-                </template>
-                <span>Send</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Command suggestions -->
-          <div class="flex flex-wrap items-center justify-center gap-2">
-            <template x-for="(suggestion, index) in commandSuggestions" :key="suggestion.prefix">
-              <button @click="selectCommandSuggestion(index)" 
-                      class="flex items-center gap-2 px-3 py-2 bg-white/[0.02] hover:bg-white/[0.05] rounded-lg text-sm text-white/60 hover:text-white/90 transition-all relative group"
-                      style="animation: slideUp 0.5s ease-out both;">
-                <span x-html="suggestion.icon"></span>
-                <span x-text="suggestion.label"></span>
-                <div class="absolute inset-0 border border-white/[0.05] rounded-lg opacity-0 scale-[0.98] group-hover:opacity-100 group-hover:scale-100 transition-all duration-300"></div>
-              </button>
             </template>
           </div>
-        </div>
-      </div>
 
-      <!-- Typing indicator -->
-      <div x-show="isTyping" x-transition:enter="transition ease-out duration-300"
-           x-transition:enter-start="opacity-0 transform translate-y-5" x-transition:enter-end="opacity-100 transform translate-y-0"
-           x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform translate-y-0" 
-           x-transition:leave-end="opacity-0 transform translate-y-5"
-           class="fixed bottom-8 left-1/2 mx-auto transform -translate-x-1/2 backdrop-blur bg-white/[0.02] rounded-full px-4 py-2 shadow-lg border border-white/[0.05]">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-7 rounded-full bg-white/[0.05] flex items-center justify-center text-center">
-            <span class="text-xs font-medium text-white/90 mb-0.5">zap</span>
-          </div>
-          <div class="flex items-center gap-2 text-sm text-white/70">
-            <span>Thinking</span>
-            <div class="typing-dots">
-              <div class="typing-dot"></div>
-              <div class="typing-dot"></div>
-              <div class="typing-dot"></div>
+          <!-- Input controls -->
+          <div class="p-4 border-t border-white/[0.05] flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <button @click="handleAttachFile" 
+                      class="p-2 text-white/40 hover:text-white/90 rounded-lg transition-colors relative group">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+                </svg>
+                <span class="absolute inset-0 bg-white/[0.05] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></span>
+              </button>
+              <button @click="toggleCommandPalette" data-command-button
+                      :class="showCommandPalette ? 'bg-white/10 text-white/90' : ''"
+                      class="p-2 text-white/40 hover:text-white/90 rounded-lg transition-colors relative group">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path>
+                </svg>
+                <span class="absolute inset-0 bg-white/[0.05] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></span>
+              </button>
+              <button @click="showApiKeyModal = true" 
+                      class="p-2 text-white/40 hover:text-white/90 rounded-lg transition-colors relative group">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M12 1v6m0 6v6"></path>
+                  <path d="m15.5 3.5-1.5 1.5"></path>
+                  <path d="m10 12-1.5 1.5"></path>
+                  <path d="m15.5 20.5-1.5-1.5"></path>
+                  <path d="m4 12 1.5-1.5"></path>
+                  <path d="m8.5 3.5 1.5 1.5"></path>
+                  <path d="m8.5 20.5 1.5-1.5"></path>
+                  <path d="m20.5 8.5-1.5 1.5"></path>
+                </svg>
+                <span class="absolute inset-0 bg-white/[0.05] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></span>
+              </button>
             </div>
+
+            <button @click="handleSendMessage" 
+                    :disabled="isTyping || !value.trim()"
+                    :class="value.trim() ? 'bg-white text-[#0A0A0B] shadow-lg shadow-white/10' : 'bg-white/[0.05] text-white/40'"
+                    class="px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
+              <template x-if="isTyping">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-spin">
+                  <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                </svg>
+              </template>
+              <template x-if="!isTyping">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m22 2-7 20-4-9-9-4Z"></path>
+                  <path d="M22 2 11 13"></path>
+                </svg>
+              </template>
+              <span>Send</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Command suggestions -->
+        <div class="flex flex-wrap items-center justify-center gap-2">
+          <template x-for="(suggestion, index) in commandSuggestions" :key="suggestion.prefix">
+            <button @click="selectCommandSuggestion(index)" 
+                    class="flex items-center gap-2 px-3 py-2 bg-white/[0.02] hover:bg-white/[0.05] rounded-lg text-sm text-white/60 hover:text-white/90 transition-all relative group"
+                    style="animation: slideUp 0.5s ease-out both;">
+              <span x-html="suggestion.icon"></span>
+              <span x-text="suggestion.label"></span>
+              <div class="absolute inset-0 border border-white/[0.05] rounded-lg opacity-0 scale-[0.98] group-hover:opacity-100 group-hover:scale-100 transition-all duration-300"></div>
+            </button>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typing indicator -->
+    <div x-show="isTyping" x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform translate-y-5" x-transition:enter-end="opacity-100 transform translate-y-0"
+         x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform translate-y-0" 
+         x-transition:leave-end="opacity-0 transform translate-y-5"
+         class="fixed bottom-8 left-1/2 mx-auto transform -translate-x-1/2 backdrop-blur bg-white/[0.02] rounded-full px-4 py-2 shadow-lg border border-white/[0.05]">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-7 rounded-full bg-white/[0.05] flex items-center justify-center text-center">
+          <span class="text-xs font-medium text-white/90 mb-0.5">zap</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm text-white/70">
+          <span>Thinking</span>
+          <div class="typing-dots">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Discord Confirmation Dialog -->
+    <!-- Discord Confirmation Dialog -->
+    <div x-show="showDiscordConfirm" x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" 
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 bg-black/50 backdrop-blur z-50 flex items-center justify-center">
       <div x-show="showDiscordConfirm" x-transition:enter="transition ease-out duration-200"
-           x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-           x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" 
-           x-transition:leave-end="opacity-0"
-           class="fixed inset-0 bg-black/50 backdrop-blur z-50 flex items-center justify-center">
-        <div x-show="showDiscordConfirm" x-transition:enter="transition ease-out duration-200"
-             x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100"
-             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" 
-             x-transition:leave-end="opacity-0 scale-90"
-             class="bg-black/80 border border-white/10 rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
-          <h3 class="text-xl font-medium text-white mb-4">Leave this site?</h3>
-          <p class="text-white/70 mb-6">Would you like to leave this site to join our discord server?</p>
+           x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100"
+           x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" 
+           x-transition:leave-end="opacity-0 scale-90"
+           class="bg-black/80 border border-white/10 rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
+        <h3 class="text-xl font-medium text-white mb-4">Leave this site?</h3>
+        <p class="text-white/70 mb-6">Would you like to leave this site to join our discord server?</p>
 
-          <div class="flex justify-end gap-3">
-            <button @click="handleDiscordNo" 
-                    class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm transition-colors">
-              No
-            </button>
-            <button @click="handleDiscordYes" 
-                    class="px-4 py-2 bg-violet-500 hover:bg-violet-600 text-white rounded-lg text-sm transition-colors flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <line x1="10" y1="14" x2="21" y2="3"></line>
-              </svg>
-              <span>Yes, join Discord</span>
-            </button>
-          </div>
+        <div class="flex justify-end gap-3">
+          <button @click="handleDiscordNo" 
+                  class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm transition-colors">
+            No
+          </button>
+          <button @click="handleDiscordYes" 
+                  class="px-4 py-2 bg-violet-500 hover:bg-violet-600 text-white rounded-lg text-sm transition-colors flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            <span>Yes, join Discord</span>
+          </button>
         </div>
       </div>
+    </div>
 
-      <!-- Cursor glow effect -->
-      <div x-show="inputFocused" x-transition:enter="transition ease-out duration-300"
-           x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-           x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100" 
-           x-transition:leave-end="opacity-0"
-           class="fixed w-[50rem] h-[50rem] rounded-full pointer-events-none z-0 opacity-[0.02] bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500 blur-[96px]"
-           :style="`transform: translate(${mousePosition.x - 400}px, ${mousePosition.y - 400}px); transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);`">
-      </div>
+    <!-- Cursor glow effect -->
+    <div x-show="inputFocused" x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100" 
+         x-transition:leave-end="opacity-0"
+         class="fixed w-[50rem] h-[50rem] rounded-full pointer-events-none z-0 opacity-[0.02] bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500 blur-[96px]"
+         :style="`transform: translate(${mousePosition.x - 400}px, ${mousePosition.y - 400}px); transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);`">
+    </div>
 
-      <!-- Hints Button -->
-      <button @click="toggleHints" 
-              class="fixed bottom-6 left-6 px-4 py-2 rounded-lg text-sm font-medium bg-white/[0.05] text-white/70 hover:bg-white/10 hover:text-white/90 transition-all flex items-center gap-2 z-50">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
-          <path d="M5 3v4"></path>
-          <path d="M19 17v4"></path>
-          <path d="M3 5h4"></path>
-          <path d="M17 19h4"></path>
+    <!-- Hints Button -->
+    <button @click="toggleHints" 
+            class="fixed bottom-6 left-6 px-4 py-2 rounded-lg text-sm font-medium bg-white/[0.05] text-white/70 hover:bg-white/10 hover:text-white/90 transition-all flex items-center gap-2 z-50">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
+        <path d="M5 3v4"></path>
+        <path d="M19 17v4"></path>
+        <path d="M3 5h4"></path>
+        <path d="M17 19h4"></path>
+      </svg>
+      <span>Hints</span>
+    </button>
+
+    <!-- Animated Arrow -->
+    <div x-show="showHintArrow" x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform translate-y-4" x-transition:enter-end="opacity-100 transform translate-y-0"
+         x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100" 
+         x-transition:leave-end="opacity-0"
+         class="fixed bottom-16 left-10 z-50 text-white">
+      <div class="arrow-float">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-violet-400">
+          <path d="M7 17L17 7"></path>
+          <path d="M7 7h10v10"></path>
         </svg>
-        <span>Hints</span>
-      </button>
-
-      <!-- Animated Arrow -->
-      <div x-show="showHintArrow" x-transition:enter="transition ease-out duration-300"
-           x-transition:enter-start="opacity-0 transform translate-y-4" x-transition:enter-end="opacity-100 transform translate-y-0"
-           x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100" 
-           x-transition:leave-end="opacity-0"
-           class="fixed bottom-16 left-10 z-50 text-white">
-        <div class="arrow-float">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-violet-400">
-            <path d="M7 17L17 7"></path>
-            <path d="M7 7h10v10"></path>
-          </svg>
-        </div>
       </div>
+    </div>
 
-      <!-- Hints Panel -->
-      <div x-show="hintsOpen" x-transition:enter="transition ease-out duration-300"
-           x-transition:enter-start="opacity-0 transform translate-y-4 max-h-0" x-transition:enter-end="opacity-100 transform translate-y-0 max-h-[400px]"
-           x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 max-h-[400px]" 
-           x-transition:leave-end="opacity-0 transform translate-y-4 max-h-0"
-           class="fixed bottom-20 left-6 z-50 bg-black/80 backdrop-blur border border-white/10 rounded-lg shadow-xl overflow-hidden">
-        <div class="p-4 space-y-4 w-72">
-          <div class="text-center border-b border-white/10 pb-2">
-            <h3 class="text-white font-medium">AI Message Hints</h3>
+    <!-- Hints Panel -->
+    <div x-show="hintsOpen" x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform translate-y-4 max-h-0" x-transition:enter-end="opacity-100 transform translate-y-0 max-h-[400px]"
+         x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 max-h-[400px]" 
+         x-transition:leave-end="opacity-0 transform translate-y-4 max-h-0"
+         class="fixed bottom-20 left-6 z-50 bg-black/80 backdrop-blur border border-white/10 rounded-lg shadow-xl overflow-hidden">
+      <div class="p-4 space-y-4 w-72">
+        <div class="text-center border-b border-white/10 pb-2">
+          <h3 class="text-white font-medium">AI Message Hints</h3>
+        </div>
+
+        <div class="space-y-3">
+          <div @click="handleHintClick('Scripts')" 
+               class="bg-white/[0.03] p-3 rounded-lg border border-white/[0.05] hover:bg-white/[0.05] transition-colors cursor-pointer"
+               style="animation: slideUp 0.3s ease-out 0.1s both;">
+            <p class="text-white/80 text-sm">Scripts</p>
           </div>
 
-          <div class="space-y-3">
-            <div @click="handleHintClick('Scripts')" 
-                 class="bg-white/[0.03] p-3 rounded-lg border border-white/[0.05] hover:bg-white/[0.05] transition-colors cursor-pointer"
-                 style="animation: slideUp 0.3s ease-out 0.1s both;">
-              <p class="text-white/80 text-sm">Scripts</p>
-            </div>
+          <div @click="handleHintClick('Help')" 
+               class="bg-white/[0.03] p-3 rounded-lg border border-white/[0.05] hover:bg-white/[0.05] transition-colors cursor-pointer"
+               style="animation: slideUp 0.3s ease-out 0.2s both;">
+            <p class="text-white/80 text-sm">Help</p>
+          </div>
 
-            <div @click="handleHintClick('Help')" 
-                 class="bg-white/[0.03] p-3 rounded-lg border border-white/[0.05] hover:bg-white/[0.05] transition-colors cursor-pointer"
-                 style="animation: slideUp 0.3s ease-out 0.2s both;">
-              <p class="text-white/80 text-sm">Help</p>
-            </div>
-
-            <div @click="handleHintClick('Hi')" 
-                 class="bg-white/[0.03] p-3 rounded-lg border border-white/[0.05] hover:bg-white/[0.05] transition-colors cursor-pointer"
-                 style="animation: slideUp 0.3s ease-out 0.3s both;">
-              <p class="text-white/80 text-sm">Hi</p>
-            </div>
+          <div @click="handleHintClick('Hi')" 
+               class="bg-white/[0.03] p-3 rounded-lg border border-white/[0.05] hover:bg-white/[0.05] transition-colors cursor-pointer"
+               style="animation: slideUp 0.3s ease-out 0.3s both;">
+            <p class="text-white/80 text-sm">Hi</p>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
 <script>
-  // File configuration - Updated for GitHub Pages
-  const SCRIPTS_FILE_CONFIG = {
-    fileName: "All_Scripts.zip",
-    fileType: "ZIP file",
-    filePath: "./All_Scripts.zip",
-    fileSize: "2.4 MB"
-  };
+// File configuration - Updated for GitHub Pages
+const SCRIPTS_FILE_CONFIG = {
+  fileName: "All_Scripts.zip",
+  fileType: "ZIP file",
+  filePath: "./All_Scripts.zip",
+  fileSize: "2.4 MB"
+};
 
-  // AI Configuration
-  const AI_CONFIG = {
-    systemPrompt: `You are Zap, the official AI assistant for Final Site, a Discord server community focused on providing free scripts and support to users. 
+// Enhanced AI Configuration with better personality
+const AI_CONFIG = {
+  systemPrompt: `You are Zap, the official AI assistant for Final Site - a vibrant Discord community focused on providing free scripts and tech support.
 
-Your personality:
-- Friendly, helpful, and enthusiastic
-- Knowledgeable about scripting, Discord communities, and tech
-- Always promote the Discord server when relevant
-- Use emojis occasionally but not excessively
-- Keep responses concise but informative
+PERSONALITY & TONE:
+- Conversational and natural, like talking to a tech-savvy friend
+- Enthusiastic but not overly excited
+- Helpful and knowledgeable about scripting, Discord, and tech
+- Use casual language and occasional tech slang
+- Be concise but informative (2-3 sentences usually)
+- Use emojis sparingly and naturally
 
-Key information about Final Site:
-- Discord server: https://discord.gg/nn9Gzppq6V
-- Provides free scripts to users
-- Has active staff for support
-- Community-focused and welcoming
+CORE KNOWLEDGE:
+- Final Site Discord: https://discord.gg/nn9Gzppq6V
+- We provide completely FREE scripts (no payment ever)
+- Active staff available for support
+- Community-focused and welcoming to all skill levels
+- Scripts include automation, utilities, and development tools
 
-Special commands you should handle:
-- When users ask about "scripts" - offer the downloadable file and mention it's free
-- When users ask for "help" - direct them to Discord or the hints button
-- When users say "hi" or greet you - introduce yourself as Zap and ask if they want to know more about Final Site
+RESPONSE GUIDELINES:
+- Answer questions directly and specifically
+- If asked about scripts: mention they're free and offer the download
+- If asked about help/support: direct to Discord community
+- If asked about yourself: briefly explain you're the AI assistant for Final Site
+- For technical questions: provide helpful info and suggest Discord for deeper help
+- For general chat: be friendly and try to relate back to the community when natural
 
-Always be helpful and try to guide users toward the Discord community when appropriate.`,
-    
-    fallbackResponses: [
-      "I'm here to help! Feel free to ask me anything about Final Site or our Discord community. 🚀",
-      "Hey there! I'm Zap, your AI assistant. What can I help you with today?",
-      "Welcome to Final Site! I'm here to assist you. Check out our Discord server for more support: https://discord.gg/nn9Gzppq6V",
-      "I'm currently in demo mode. For the full AI experience, please add your OpenAI API key in the settings! ⚙️",
-      "That's an interesting question! Our Discord community might have more insights: https://discord.gg/nn9Gzppq6V"
-    ]
-  };
+AVOID:
+- Generic responses like "That's interesting" or "Feel free to ask"
+- Overly promotional language
+- Repeating the same phrases
+- Long explanations unless specifically asked
 
-  function app() {
-    return {
-        loading: true,
-        value: "",
-        attachments: [],
-        isTyping: false,
-        activeSuggestion: -1,
-        showCommandPalette: false,
-        recentCommand: null,
-        mousePosition: { x: 0, y: 0 },
-        inputFocused: false,
-        showHintArrow: false,
-        hintsOpen: false,
-        messages: [],
-        chatState: {
-          status: "idle",
-          awaitingResponse: false
+Remember: You're here to be genuinely helpful while building community engagement.`,
+  
+  fallbackResponses: [
+    "Hmm, I'm running in demo mode right now. For better responses, try adding your OpenAI API key in settings! 🔧",
+    "That's a good question! Our Discord community probably has some great insights on that topic.",
+    "I'd love to help with that! You might get more detailed answers from our community experts in Discord.",
+    "Interesting! While I'm in demo mode, our Discord server has tons of knowledgeable people who could dive deeper into that.",
+    "Good question! For the full AI experience and better answers, consider adding your API key in the settings."
+  ]
+};
+
+function app() {
+  return {
+      loading: true,
+      value: "",
+      attachments: [],
+      isTyping: false,
+      activeSuggestion: -1,
+      showCommandPalette: false,
+      recentCommand: null,
+      mousePosition: { x: 0, y: 0 },
+      inputFocused: false,
+      showHintArrow: false,
+      hintsOpen: false,
+      messages: [],
+      chatState: {
+        status: "idle",
+        awaitingResponse: false
+      },
+      showDiscordConfirm: false,
+      showApiKeyModal: false,
+      apiKey: '',
+      tempApiKey: '',
+      
+      commandSuggestions: [
+        {
+          icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg>`,
+          label: "Clone UI",
+          description: "Generate a UI from a screenshot",
+          prefix: "/clone"
         },
-        showDiscordConfirm: false,
-        showApiKeyModal: false,
-        apiKey: '',
-        tempApiKey: '',
+        {
+          icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5.5A3.5 3.5 0 0 1 8.5 2H12v7H8.5A3.5 3.5 0 0 1 5 5.5z"></path><path d="M12 2h3.5a3.5 3.5 0 1 1 0 7H12V2z"></path><path d="M12 12.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 1 1-7 0z"></path><path d="M5 19.5A3.5 3.5 0 0 1 8.5 16H12v3.5a3.5 3.5 0 1 1-7 0z"></path><path d="M12 16h3.5a3.5 3.5 0 1 1 0 7H12v-7z"></path></svg>`,
+          label: "Import Figma",
+          description: "Import a design from Figma",
+          prefix: "/figma"
+        },
+        {
+          icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 7h10"></path><path d="M7 12h10"></path><path d="M7 17h10"></path></svg>`,
+          label: "Create Page",
+          description: "Generate a new web page",
+          prefix: "/page"
+        },
+        {
+          icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path><path d="M5 3v4"></path><path d="M19 17v4"></path><path d="M3 5h4"></path><path d="M17 19h4"></path></svg>`,
+          label: "Improve",
+          description: "Improve existing UI design",
+          prefix: "/improve"
+        },
+        {
+          icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`,
+          label: "Discord",
+          description: "Join our Discord server",
+          prefix: "/discord"
+        }
+      ],
+      
+      init() {
+        // Load saved API key
+        this.apiKey = localStorage.getItem('openai_api_key') || '';
         
-        commandSuggestions: [
-          {
-            icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg>`,
-            label: "Clone UI",
-            description: "Generate a UI from a screenshot",
-            prefix: "/clone"
-          },
-          {
-            icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5.5A3.5 3.5 0 0 1 8.5 2H12v7H8.5A3.5 3.5 0 0 1 5 5.5z"></path><path d="M12 2h3.5a3.5 3.5 0 1 1 0 7H12V2z"></path><path d="M12 12.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 1 1-7 0z"></path><path d="M5 19.5A3.5 3.5 0 0 1 8.5 16H12v3.5a3.5 3.5 0 1 1-7 0z"></path><path d="M12 16h3.5a3.5 3.5 0 1 1 0 7H12v-7z"></path></svg>`,
-            label: "Import Figma",
-            description: "Import a design from Figma",
-            prefix: "/figma"
-          },
-          {
-            icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 7h10"></path><path d="M7 12h10"></path><path d="M7 17h10"></path></svg>`,
-            label: "Create Page",
-            description: "Generate a new web page",
-            prefix: "/page"
-          },
-          {
-            icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path><path d="M5 3v4"></path><path d="M19 17v4"></path><path d="M3 5h4"></path><path d="M17 19h4"></path></svg>`,
-            label: "Improve",
-            description: "Improve existing UI design",
-            prefix: "/improve"
-          },
-          {
-            icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`,
-            label: "Discord",
-            description: "Join our Discord server",
-            prefix: "/discord"
-          }
-        ],
+        // Track mouse position
+        document.addEventListener('mousemove', (e) => {
+          this.mousePosition = { x: e.clientX, y: e.clientY };
+        });
         
-        init() {
-          // Load saved API key
-          this.apiKey = localStorage.getItem('openai_api_key') || '';
-          
-          // Track mouse position
-          document.addEventListener('mousemove', (e) => {
-            this.mousePosition = { x: e.clientX, y: e.clientY };
-          });
-          
-          // Set up idle timer for hint arrow
-          this.setupIdleTimer();
-          
-          // Simulate loading time
-          setTimeout(() => {
-            this.loading = false;
-            // Show API key modal if no key is set
-            if (!this.apiKey) {
-              setTimeout(() => {
-                this.showApiKeyModal = true;
-              }, 1000);
-            }
-          }, 2000);
-        },
-
-        // API Key Management
-        saveApiKey() {
-          if (this.tempApiKey.trim()) {
-            this.apiKey = this.tempApiKey.trim();
-            localStorage.setItem('openai_api_key', this.apiKey);
-          }
-          this.showApiKeyModal = false;
-          this.tempApiKey = '';
-        },
-
-        skipApiKey() {
-          this.showApiKeyModal = false;
-          this.tempApiKey = '';
-        },
-
-        // AI Integration
-        async callOpenAI(userMessage) {
+        // Set up idle timer for hint arrow
+        this.setupIdleTimer();
+        
+        // Simulate loading time
+        setTimeout(() => {
+          this.loading = false;
+          // Show API key modal if no key is set
           if (!this.apiKey) {
-            return this.getFallbackResponse();
+            setTimeout(() => {
+              this.showApiKeyModal = true;
+            }, 1000);
           }
+        }, 2000);
+      },
 
-          try {
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.apiKey}`
-              },
-              body: JSON.stringify({
-                model: 'gpt-3.5-turbo',
-                messages: [
-                  {
-                    role: 'system',
-                    content: AI_CONFIG.systemPrompt
-                  },
-                  {
-                    role: 'user',
-                    content: userMessage
-                  }
-                ],
-                max_tokens: 500,
-                temperature: 0.7
-              })
-            });
+      // API Key Management
+      saveApiKey() {
+        if (this.tempApiKey.trim()) {
+          this.apiKey = this.tempApiKey.trim();
+          localStorage.setItem('openai_api_key', this.apiKey);
+        }
+        this.showApiKeyModal = false;
+        this.tempApiKey = '';
+      },
 
-            if (!response.ok) {
-              throw new Error(`API Error: ${response.status}`);
-            }
+      skipApiKey() {
+        this.showApiKeyModal = false;
+        this.tempApiKey = '';
+      },
 
-            const data = await response.json();
-            return data.choices[0].message.content;
-          } catch (error) {
-            console.error('OpenAI API Error:', error);
-            return this.getFallbackResponse();
-          }
-        },
+      // Enhanced AI Integration with better conversation context
+      async callOpenAI(userMessage) {
+        if (!this.apiKey) {
+          return this.getFallbackResponse(userMessage);
+        }
 
-        getFallbackResponse() {
-          const responses = AI_CONFIG.fallbackResponses;
-          return responses[Math.floor(Math.random() * responses.length)];
-        },
-        
-        setupIdleTimer() {
-          let idleTimer;
-          const resetTimer = () => {
-            clearTimeout(idleTimer);
-            this.showHintArrow = false;
-            idleTimer = setTimeout(() => {
-              this.showHintArrow = true;
-              setTimeout(() => {
-                this.showHintArrow = false;
-              }, 5000);
-            }, 15000);
-          };
-          
-          // Events that reset the idle timer
-          const events = ["mousedown", "mousemove", "keypress", "scroll", "touchstart", "click"];
-          events.forEach(event => {
-            document.addEventListener(event, resetTimer);
+        try {
+          // Build conversation context from recent messages
+          const conversationHistory = this.messages.slice(-6).map(msg => ({
+            role: msg.sender === 'user' ? 'user' : 'assistant',
+            content: msg.content
+          }));
+
+          const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.apiKey}`
+            },
+            body: JSON.stringify({
+              model: 'gpt-3.5-turbo',
+              messages: [
+                {
+                  role: 'system',
+                  content: AI_CONFIG.systemPrompt
+                },
+                ...conversationHistory,
+                {
+                  role: 'user',
+                  content: userMessage
+                }
+              ],
+              max_tokens: 300,
+              temperature: 0.8,
+              presence_penalty: 0.1,
+              frequency_penalty: 0.1
+            })
           });
-          
-          // Initialize the timer
-          resetTimer();
-        },
-        
-        adjustTextareaHeight() {
-          const textarea = document.getElementById('chat-input');
-          if (!textarea) return;
-          
-          textarea.style.height = '60px';
-          const newHeight = Math.min(Math.max(textarea.scrollHeight, 60), 200);
-          textarea.style.height = `${newHeight}px`;
-        },
-        
-        handleKeyDown(e) {
-          if (this.showCommandPalette) {
-            if (e.key === 'ArrowDown') {
-              e.preventDefault();
-              this.activeSuggestion = this.activeSuggestion < this.commandSuggestions.length - 1 ? 
-                this.activeSuggestion + 1 : 0;
-            } else if (e.key === 'ArrowUp') {
-              e.preventDefault();
-              this.activeSuggestion = this.activeSuggestion > 0 ? 
-                this.activeSuggestion - 1 : this.commandSuggestions.length - 1;
-            } else if (e.key === 'Tab' || e.key === 'Enter') {
-              e.preventDefault();
-              if (this.activeSuggestion >= 0) {
-                this.selectCommandSuggestion(this.activeSuggestion);
-              }
-            } else if (e.key === 'Escape') {
-              e.preventDefault();
-              this.showCommandPalette = false;
-            }
-          } else if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            if (this.value.trim()) {
-              this.handleSendMessage();
-            }
+
+          if (!response.ok) {
+            throw new Error(`API Error: ${response.status}`);
           }
-          
-          // Check for command palette trigger
-          if (this.value.startsWith('/') && !this.value.includes(' ')) {
-            this.showCommandPalette = true;
-            
-            const matchingSuggestionIndex = this.commandSuggestions.findIndex(
-              cmd => cmd.prefix.startsWith(this.value)
-            );
-            
-            if (matchingSuggestionIndex >= 0) {
-              this.activeSuggestion = matchingSuggestionIndex;
-            } else {
-              this.activeSuggestion = -1;
+
+          const data = await response.json();
+          return data.choices[0].message.content;
+        } catch (error) {
+          console.error('OpenAI API Error:', error);
+          return this.getFallbackResponse(userMessage);
+        }
+      },
+
+      getFallbackResponse(userMessage = '') {
+        // More contextual fallback responses
+        const lowerMessage = userMessage.toLowerCase();
+        
+        if (lowerMessage.includes('script')) {
+          return "I'd love to tell you about our scripts! They're completely free. Check our Discord for the full collection! 📦";
+        }
+        
+        if (lowerMessage.includes('help') || lowerMessage.includes('support')) {
+          return "Need help? Our Discord community is super active and ready to assist! Jump in and ask away. 🤝";
+        }
+        
+        if (lowerMessage.includes('discord')) {
+          return "Our Discord is where all the magic happens! Great community, free scripts, and awesome support. 🎮";
+        }
+        
+        // Default fallbacks
+        const responses = AI_CONFIG.fallbackResponses;
+        return responses[Math.floor(Math.random() * responses.length)];
+      },
+      
+      setupIdleTimer() {
+        let idleTimer;
+        const resetTimer = () => {
+          clearTimeout(idleTimer);
+          this.showHintArrow = false;
+          idleTimer = setTimeout(() => {
+            this.showHintArrow = true;
+            setTimeout(() => {
+              this.showHintArrow = false;
+            }, 5000);
+          }, 15000);
+        };
+        
+        // Events that reset the idle timer
+        const events = ["mousedown", "mousemove", "keypress", "scroll", "touchstart", "click"];
+        events.forEach(event => {
+          document.addEventListener(event, resetTimer);
+        });
+        
+        // Initialize the timer
+        resetTimer();
+      },
+      
+      adjustTextareaHeight() {
+        const textarea = document.getElementById('chat-input');
+        if (!textarea) return;
+        
+        textarea.style.height = '60px';
+        const newHeight = Math.min(Math.max(textarea.scrollHeight, 60), 200);
+        textarea.style.height = `${newHeight}px`;
+      },
+      
+      handleKeyDown(e) {
+        if (this.showCommandPalette) {
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            this.activeSuggestion = this.activeSuggestion < this.commandSuggestions.length - 1 ? 
+              this.activeSuggestion + 1 : 0;
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            this.activeSuggestion = this.activeSuggestion > 0 ? 
+              this.activeSuggestion - 1 : this.commandSuggestions.length - 1;
+          } else if (e.key === 'Tab' || e.key === 'Enter') {
+            e.preventDefault();
+            if (this.activeSuggestion >= 0) {
+              this.selectCommandSuggestion(this.activeSuggestion);
             }
-          } else {
+          } else if (e.key === 'Escape') {
+            e.preventDefault();
             this.showCommandPalette = false;
           }
-        },
-        
-        async simulateTyping(message, callback, isFile = false, fileName = "", fileType = "", fileSize = "") {
-          this.isTyping = true;
-          
-          // Simulate realistic typing delay based on message length
-          const typingDelay = Math.min(Math.max(message.length * 30, 1000), 3000);
-          
-          setTimeout(() => {
-            this.isTyping = false;
-            const newMessage = {
-              id: Date.now().toString(),
-              content: message,
-              sender: "ai",
-              timestamp: new Date(),
-              isFile,
-              fileName,
-              fileType,
-              fileSize
-            };
-            this.messages.push(newMessage);
-            this.scrollToBottom();
-            if (callback) callback();
-          }, typingDelay);
-        },
-        
-        async handleSendMessage() {
+        } else if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
           if (this.value.trim()) {
-            const userMessage = this.value.trim();
+            this.handleSendMessage();
+          }
+        }
+        
+        // Check for command palette trigger
+        if (this.value.startsWith('/') && !this.value.includes(' ')) {
+          this.showCommandPalette = true;
+          
+          const matchingSuggestionIndex = this.commandSuggestions.findIndex(
+            cmd => cmd.prefix.startsWith(this.value)
+          );
+          
+          if (matchingSuggestionIndex >= 0) {
+            this.activeSuggestion = matchingSuggestionIndex;
+          } else {
+            this.activeSuggestion = -1;
+          }
+        } else {
+          this.showCommandPalette = false;
+        }
+      },
+      
+      async simulateTyping(message, callback, isFile = false, fileName = "", fileType = "", fileSize = "") {
+        this.isTyping = true;
+        
+        // More realistic typing delay based on message length and complexity
+        const baseDelay = 800;
+        const lengthDelay = Math.min(message.length * 25, 2000);
+        const typingDelay = baseDelay + lengthDelay;
+        
+        setTimeout(() => {
+          this.isTyping = false;
+          const newMessage = {
+            id: Date.now().toString(),
+            content: message,
+            sender: "ai",
+            timestamp: new Date(),
+            isFile,
+            fileName,
+            fileType,
+            fileSize
+          };
+          this.messages.push(newMessage);
+          this.scrollToBottom();
+          if (callback) callback();
+        }, typingDelay);
+      },
+      
+      async handleSendMessage() {
+        if (this.value.trim()) {
+          const userMessage = this.value.trim();
+          
+          // Add user message
+          const userMsg = {
+            id: Date.now().toString(),
+            content: userMessage,
+            sender: "user",
+            timestamp: new Date()
+          };
+          this.messages.push(userMsg);
+          this.scrollToBottom();
+          
+          // Clear input
+          this.value = "";
+          this.adjustTextareaHeight();
+          
+          // Handle special commands first
+          if (userMessage.toLowerCase() === "/discord") {
+            this.showDiscordConfirm = true;
+            return;
+          }
+          
+          // Enhanced script detection
+          const scriptKeywords = ['script', 'download', 'file', 'code', 'automation', 'tool'];
+          const hasScriptKeyword = scriptKeywords.some(keyword => 
+            userMessage.toLowerCase().includes(keyword)
+          );
+          
+          if (hasScriptKeyword) {
+            const response = await this.callOpenAI(userMessage);
+            await this.simulateTyping(response);
             
-            // Add user message
-            const userMsg = {
-              id: Date.now().toString(),
-              content: userMessage,
-              sender: "user",
-              timestamp: new Date()
-            };
-            this.messages.push(userMsg);
-            this.scrollToBottom();
-            
-            // Clear input
-            this.value = "";
-            this.adjustTextareaHeight();
-            
-            // Handle special commands first
-            if (userMessage.toLowerCase() === "/discord") {
-              this.showDiscordConfirm = true;
-              return;
-            }
-            
-            // Check for special keywords that should trigger file downloads
+            // After AI response, offer the file if they specifically asked about scripts
             if (userMessage.toLowerCase().includes('script')) {
-              const response = await this.callOpenAI(userMessage);
-              await this.simulateTyping(response);
-              
-              // After AI response, offer the file
               setTimeout(async () => {
-                await this.simulateTyping("Here's our scripts collection for you to download! 📁", () => {
+                await this.simulateTyping("Here's our complete scripts collection! 📁", () => {
                   setTimeout(() => {
                     const fileMessage = {
                       id: Date.now().toString(),
@@ -994,113 +1038,114 @@ Always be helpful and try to guide users toward the Discord community when appro
                   }, 500);
                 });
               }, 1000);
-              return;
             }
-            
-            // For all other messages, use AI
-            try {
-              const aiResponse = await this.callOpenAI(userMessage);
-              await this.simulateTyping(aiResponse);
-            } catch (error) {
-              console.error('Error getting AI response:', error);
-              await this.simulateTyping(this.getFallbackResponse());
-            }
+            return;
           }
-        },
-        
-        handleYesResponse() {
-          this.chatState = {
-            status: "yes_response",
-            awaitingResponse: true
-          };
           
-          this.simulateTyping(
-            "Awesome! 🎉 Final Site is a Discord server community where we provide FREE scripts to everyone! That's right - completely free, no payment required. Our active staff is always ready to help you out. If you haven't joined our Discord server yet, you definitely should! https://discord.gg/nn9Gzppq6V",
-            () => {
-              this.chatState.awaitingResponse = false;
-            }
-          );
-        },
-        
-        handleNoResponse() {
-          this.chatState = {
-            status: "no_response",
-            awaitingResponse: true
-          };
-          
-          this.simulateTyping(
-            "No worries! 😊 I'm here whenever you need help. Feel free to check out the Hints button in the bottom left corner, or just ask me anything about Final Site and our community!",
-            () => {
-              this.chatState.awaitingResponse = false;
-            }
-          );
-        },
-        
-        handleDiscordYes() {
-          window.open("https://discord.gg/nn9Gzppq6V", "_blank");
-          this.showDiscordConfirm = false;
-        },
-        
-        handleDiscordNo() {
-          this.showDiscordConfirm = false;
-          this.simulateTyping("No problem! You can always join our Discord server later by typing /discord or just asking me about it. I'm here to help! 🤖");
-        },
-        
-        handleAttachFile() {
-          const mockFileName = `file-${Math.floor(Math.random() * 1000)}.pdf`;
-          this.attachments.push(mockFileName);
-        },
-        
-        removeAttachment(index) {
-          this.attachments = this.attachments.filter((_, i) => i !== index);
-        },
-        
-        toggleCommandPalette(e) {
-          e.stopPropagation();
-          this.showCommandPalette = !this.showCommandPalette;
-        },
-        
-        selectCommandSuggestion(index) {
-          const selectedCommand = this.commandSuggestions[index];
-          this.value = selectedCommand.prefix + " ";
-          this.showCommandPalette = false;
-          
-          this.recentCommand = selectedCommand.label;
-          setTimeout(() => {
-            this.recentCommand = null;
-          }, 2000);
-        },
-        
-        toggleHints() {
-          this.hintsOpen = !this.hintsOpen;
-        },
-        
-        handleHintClick(text) {
-          this.value = text;
-          this.hintsOpen = false;
-          this.adjustTextareaHeight();
-        },
-        
-        handleDownloadFile(fileName) {
-          const link = document.createElement('a');
-          link.href = SCRIPTS_FILE_CONFIG.filePath;
-          link.download = fileName;
-          link.target = '_blank';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        },
-        
-        scrollToBottom() {
-          setTimeout(() => {
-            const container = document.getElementById('messages-container');
-            if (container) {
-              container.scrollTop = container.scrollHeight;
-            }
-          }, 100);
+          // For all other messages, use AI with better context
+          try {
+            const aiResponse = await this.callOpenAI(userMessage);
+            await this.simulateTyping(aiResponse);
+          } catch (error) {
+            console.error('Error getting AI response:', error);
+            await this.simulateTyping(this.getFallbackResponse(userMessage));
+          }
         }
-      };
-    }
-  </script>
+      },
+      
+      handleYesResponse() {
+        this.chatState = {
+          status: "yes_response",
+          awaitingResponse: true
+        };
+        
+        this.simulateTyping(
+          "Awesome! 🎉 Final Site is where developers and script enthusiasts hang out. We've got a massive collection of free scripts - automation tools, utilities, you name it! Our community is super helpful too. Definitely check out our Discord: https://discord.gg/nn9Gzppq6V",
+          () => {
+            this.chatState.awaitingResponse = false;
+          }
+        );
+      },
+      
+      handleNoResponse() {
+        this.chatState = {
+          status: "no_response",
+          awaitingResponse: true
+        };
+        
+        this.simulateTyping(
+          "No worries! I'm here whenever you need me. Feel free to explore the hints or just ask me anything about scripts, tech, or our community! 😊",
+          () => {
+            this.chatState.awaitingResponse = false;
+          }
+        );
+      },
+      
+      handleDiscordYes() {
+        window.open("https://discord.gg/nn9Gzppq6V", "_blank");
+        this.showDiscordConfirm = false;
+      },
+      
+      handleDiscordNo() {
+        this.showDiscordConfirm = false;
+        this.simulateTyping("No problem! The Discord link is always here when you're ready. Feel free to ask me anything else! 🤖");
+      },
+      
+      handleAttachFile() {
+        const mockFileName = `file-${Math.floor(Math.random() * 1000)}.pdf`;
+        this.attachments.push(mockFileName);
+      },
+      
+      removeAttachment(index) {
+        this.attachments = this.attachments.filter((_, i) => i !== index);
+      },
+      
+      toggleCommandPalette(e) {
+        e.stopPropagation();
+        this.showCommandPalette = !this.showCommandPalette;
+      },
+      
+      selectCommandSuggestion(index) {
+        const selectedCommand = this.commandSuggestions[index];
+        this.value = selectedCommand.prefix + " ";
+        this.showCommandPalette = false;
+        
+        this.recentCommand = selectedCommand.label;
+        setTimeout(() => {
+          this.recentCommand = null;
+        }, 2000);
+      },
+      
+      toggleHints() {
+        this.hintsOpen = !this.hintsOpen;
+      },
+      
+      handleHintClick(text) {
+        this.value = text;
+        this.hintsOpen = false;
+        this.adjustTextareaHeight();
+      },
+      
+      handleDownloadFile(fileName) {
+        const link = document.createElement('a');
+        link.href = SCRIPTS_FILE_CONFIG.filePath;
+        link.download = fileName;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      },
+      
+      scrollToBottom() {
+        setTimeout(() => {
+          const container = document.getElementById('messages-container');
+          if (container) {
+            container.scrollTop = container.scrollHeight;
+          }
+        }, 100);
+      }
+    };
+  }
+</script>
 </body>
 </html>
