@@ -264,6 +264,173 @@
     z-index: 1000;
     max-width: 300px;
   }
+
+/* Coding Interface */
+.coding-interface {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.coding-header {
+  background: rgba(20, 20, 20, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: between;
+}
+
+.coding-tabs {
+  display: flex;
+  gap: 8px;
+  margin-left: 16px;
+}
+
+.coding-tab {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.coding-tab.active {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.5);
+  color: white;
+}
+
+.coding-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.coding-content {
+  display: flex;
+  height: calc(100vh - 60px);
+}
+
+.code-editor {
+  flex: 1;
+  background: rgba(15, 15, 15, 0.95);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.code-editor-header {
+  padding: 12px 16px;
+  background: rgba(25, 25, 25, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.code-textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 16px;
+  resize: none;
+  outline: none;
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+}
+
+.preview-pane {
+  flex: 1;
+  background: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-header {
+  padding: 12px 16px;
+  background: rgba(25, 25, 25, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.preview-iframe {
+  flex: 1;
+  border: none;
+  background: white;
+}
+
+.coding-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.coding-btn {
+  padding: 6px 12px;
+  background: rgba(139, 92, 246, 0.8);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.coding-btn:hover {
+  background: rgba(139, 92, 246, 1);
+}
+
+.coding-btn.secondary {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.coding-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Syntax highlighting basic styles */
+.code-textarea {
+  color: #f8f8f2;
+}
+
+/* Loading animation for preview */
+.preview-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: #f5f5f5;
+  color: #666;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .coding-content {
+    flex-direction: column;
+  }
+  
+  .code-editor {
+    height: 50vh;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .preview-pane {
+    height: 50vh;
+  }
+}
 </style>
 <script>
   tailwind.config = {
@@ -309,8 +476,8 @@
          x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" 
          x-transition:leave-end="opacity-0 scale-90"
          class="bg-black/90 border border-white/10 rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
-      <h3 class="text-xl font-medium text-white mb-4">🤖 Enable AI Chat</h3>
-      <p class="text-white/70 mb-4">To enable AI responses, please enter your Cohere API key:</p>
+      <h3 class="text-xl font-medium text-white mb-4">🎮 Final Stand Support</h3>
+      <p class="text-white/70 mb-4">Welcome! I'm here to help with Final Stand scripts and gameplay. You can also add your own Cohere API key for enhanced responses:</p>
       
       <input x-model="tempApiKey" type="password" placeholder="Your Cohere API key..." 
              class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-violet-500 mb-4">
@@ -324,7 +491,7 @@
       <div class="flex justify-end gap-3">
         <button @click="skipApiKey" 
                 class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm transition-colors">
-          Skip (Demo Mode)
+          Continue (Default Support)
         </button>
         <button @click="saveApiKey" 
                 class="px-4 py-2 bg-violet-500 hover:bg-violet-600 text-white rounded-lg text-sm transition-colors">
@@ -523,6 +690,101 @@
       </div>
     </div>
 
+    <!-- Coding Interface -->
+    <div x-show="showCodingInterface" x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100" 
+         x-transition:leave-end="opacity-0"
+         class="coding-interface">
+      
+      <!-- Header -->
+      <div class="coding-header">
+        <div class="flex items-center gap-4">
+          <h3 class="text-white font-medium">Zap Code Editor</h3>
+          <div class="coding-tabs">
+            <template x-for="(file, index) in codeFiles" :key="file.name">
+              <button @click="activeFileIndex = index" 
+                      :class="activeFileIndex === index ? 'active' : ''"
+                      class="coding-tab" x-text="file.name"></button>
+            </template>
+          </div>
+        </div>
+        
+        <div class="coding-controls">
+          <button @click="runCode" class="coding-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Run
+          </button>
+          <button @click="downloadCode" class="coding-btn secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download
+          </button>
+          <button @click="closeCodingInterface" class="coding-btn secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            Close
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="coding-content">
+        <!-- Code Editor -->
+        <div class="code-editor">
+          <div class="code-editor-header">
+            <span class="text-white/70 text-sm" x-text="codeFiles[activeFileIndex]?.name || 'index.html'"></span>
+            <div class="flex items-center gap-2">
+              <button @click="formatCode" class="coding-btn secondary text-xs">Format</button>
+              <span class="text-white/50 text-xs" x-text="'Lines: ' + (codeFiles[activeFileIndex]?.content.split('\\n').length || 0)"></span>
+            </div>
+          </div>
+          <textarea x-model="codeFiles[activeFileIndex].content" 
+                    @input="updatePreview"
+                    class="code-textarea" 
+                    placeholder="Start coding here..."
+                    spellcheck="false"></textarea>
+        </div>
+
+        <!-- Preview Pane -->
+        <div class="preview-pane">
+          <div class="preview-header">
+            <span class="text-white/70 text-sm">Live Preview</span>
+            <div class="flex items-center gap-2">
+              <button @click="refreshPreview" class="coding-btn secondary text-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                  <path d="M21 3v5h-5"></path>
+                  <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                  <path d="M8 16H3v5"></path>
+                </svg>
+              </button>
+              <span class="text-white/50 text-xs">Auto-refresh</span>
+            </div>
+          </div>
+          <div x-show="previewLoading" class="preview-loading">
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-spin">
+                <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+              </svg>
+              <span>Updating preview...</span>
+            </div>
+          </div>
+          <iframe x-show="!previewLoading" 
+                  x-ref="previewFrame" 
+                  class="preview-iframe"
+                  sandbox="allow-scripts allow-same-origin"></iframe>
+        </div>
+      </div>
+    </div>
+
     <!-- Discord Confirmation Dialog -->
     <div x-show="showDiscordConfirm" x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -566,41 +828,19 @@ const SCRIPTS_FILE_CONFIG = {
   fileSize: "2.4 MB"
 };
 
-// AI Configuration for Cohere API
+// AI Configuration for Cohere API with Custom Prompt
 const AI_CONFIG = {
-  systemPrompt: `You are Zap, the official AI assistant for Final Site - a Discord community focused on providing free scripts and tech support. You should respond like a real AI assistant with intelligent, thoughtful, and varied responses.
+  systemPrompt: `# Objective: You are an exceptional customer support representative. Your objective is to answer questions and provide resources about Final Site, a website that comes from the Roblox game:"Final Stand", which is a Dragon Ball themed game where you grind your level. For this one, you have to help them on how to get the essential scripts, and if they ask how to grind the stats, simply say you just need to run the inf stats script and it should give you 20 points per 8 seconds, or 6200-7200 per hour. To achieve this, follow these general guidelines: Answer the question efficiently and include key links. If a question is not clear, ask follow-up questions. The discord link to the official server is:"https://discord.gg/2J9qPu4f"
 
-CORE PERSONALITY:
-- Intelligent and knowledgeable about technology, programming, and Discord communities
-- Conversational and natural - respond like you're having a real conversation
-- Helpful and thorough in explanations when needed
-- Enthusiastic about Final Site but not overly promotional
-- Use varied language and avoid repetitive phrases
-- Be creative and engaging in your responses
+# Style: Your communication style should be friendly and professional. Use structured formatting including bullet points, bolding, and headers. Add emojis to make messages more engaging.
 
-KNOWLEDGE BASE:
-- Final Site Discord: https://discord.gg/nn9Gzppq6V
-- We provide completely FREE scripts (automation, utilities, development tools)
-- Active community with helpful staff and members
-- Scripts include: automation tools, productivity utilities, development helpers, and more
-- Community welcomes all skill levels from beginners to experts
-
-RESPONSE STYLE:
-- Give thoughtful, specific answers to questions
-- Vary your language and sentence structure
-- Provide context and explanations when helpful
-- Ask follow-up questions when appropriate
-- Share relevant knowledge about programming, tech, or community topics
-- Be genuinely helpful rather than promotional
-
-Remember: You're an intelligent AI assistant who happens to represent Final Site. Be genuinely helpful, knowledgeable, and engaging in every interaction.`,
+# Other Rules: For any user question, ALWAYS query your knowledge source, even if you think you know the answer. Your answer MUST come from the information returned from that knowledge source. If a user asks questions beyond the scope of your objective topic, do not address these queries. Instead, kindly redirect to something you can help them with instead.`,
   
   fallbackResponses: [
-    "I'm currently running in demo mode, so my responses might be a bit limited. For the full AI experience, you can add your Cohere API key in the settings! In the meantime, our Discord community is always active and ready to help with any questions you might have.",
-    "That's a great question! While I'm in demo mode right now, I'd love to help you find the answer. Our Discord community has tons of knowledgeable members who could dive deep into that topic with you.",
-    "Interesting topic! I'm running with limited capabilities at the moment, but our Discord server has some really smart people who love discussing these kinds of questions. You might get some fascinating insights there!",
-    "I'd love to give you a more detailed response, but I'm currently in demo mode. For better AI interactions, consider adding your Cohere API key in settings. Otherwise, our Discord community is incredibly helpful for questions like this!",
-    "Good question! While my demo mode responses are pretty basic, our Final Site community has members with deep expertise in all sorts of tech topics. They'd probably have some great insights to share!"
+    "🎮 Hey there! I'm here to help you with **Final Site** and the **Final Stand** Roblox game! \n\n**What I can help with:**\n• Getting essential scripts for Final Stand\n• Stats grinding tips and strategies\n• General game support and resources\n\n**Need scripts?** Check out our Discord: https://discord.gg/2J9qPu4f\n\nWhat would you like to know about Final Stand? 🐉",
+    "👋 Welcome to Final Site support! I'm specialized in helping with the **Final Stand** Dragon Ball game on Roblox.\n\n**Quick Help:**\n• **Scripts**: Available in our Discord server\n• **Stats Grinding**: Use the inf stats script for optimal results\n• **Community**: Join our Discord for more support\n\n🔗 **Discord**: https://discord.gg/2J9qPu4f\n\nHow can I assist you with Final Stand today?",
+    "🐉 **Final Site Support** here! I'm your go-to for everything related to the **Final Stand** Roblox game.\n\n**Popular Questions:**\n• How to get scripts? → Check our Discord\n• Best way to grind stats? → Use inf stats script\n• Need help with the game? → I'm here to help!\n\n**Join our community**: https://discord.gg/2J9qPu4f\n\nWhat Final Stand question can I help you with? ⚡",
+    "⚡ Hello! I'm the **Final Site** support bot, specialized in helping with the **Final Stand** Dragon Ball game on Roblox.\n\n**I can help you with:**\n✅ Essential scripts for the game\n✅ Stats grinding strategies\n✅ Game tips and tricks\n✅ Community resources\n\n**Discord Server**: https://discord.gg/2J9qPu4f\n\nWhat would you like to know about Final Stand? 🎮"
   ]
 };
 
@@ -613,15 +853,96 @@ function app() {
     messages: [],
     showDiscordConfirm: false,
     showApiKeyModal: false,
-    apiKey: '',
+    apiKey: 'YOUR_ACTUAL_COHERE_API_KEY_HERE',
     tempApiKey: '',
     debugMode: false,
     lastApiCall: '',
     lastError: '',
+    showCodingInterface: false,
+    activeFileIndex: 0,
+    previewLoading: false,
+    codeFiles: [
+      {
+        name: 'index.html',
+        content: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hello World!</h1>
+        <p>Welcome to your new project created by Zap!</p>
+    </div>
+</body>
+</html>`
+      },
+      {
+        name: 'style.css',
+        content: `/* Add your custom styles here */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+`
+      },
+      {
+        name: 'script.js',
+        content: `// Add your JavaScript here
+console.log('Hello from Zap!');
+
+// Example function
+function greetUser(name) {
+    return 'Hello, ' + name + '! Welcome to your project.';
+}
+
+// Example usage
+document.addEventListener('DOMContentLoaded', function() {
+    console.log(greetUser('Developer'));
+});
+`
+      }
+    ],
     
     init() {
       // Load saved API key
-      this.apiKey = localStorage.getItem('cohere_api_key') || '';
+      this.apiKey = 'WUbYOhc9PrOTxf8lawrnpQywHRyoS0pahEFqnPQ3'; // Your custom Cohere API key
       
       // Simulate loading time
       setTimeout(() => {
@@ -640,7 +961,9 @@ function app() {
       if (this.tempApiKey.trim()) {
         this.apiKey = this.tempApiKey.trim();
         localStorage.setItem('cohere_api_key', this.apiKey);
-        this.lastApiCall = 'API key saved';
+        this.lastApiCall = 'Custom API key saved';
+      } else {
+        this.apiKey = 'WUbYOhc9PrOTxf8lawrnpQywHRyoS0pahEFqnPQ3'; // Fallback to your key
       }
       this.showApiKeyModal = false;
       this.tempApiKey = '';
@@ -649,7 +972,7 @@ function app() {
     skipApiKey() {
       this.showApiKeyModal = false;
       this.tempApiKey = '';
-      this.lastApiCall = 'Skipped API setup';
+      this.lastApiCall = 'Using custom API key';
     },
 
     // Enhanced AI Integration with Cohere API
@@ -739,26 +1062,26 @@ Zap:`;
     },
 
     getFallbackResponse(userMessage = '') {
-      // More contextual fallback responses
+      // More contextual fallback responses for Final Stand game
       const lowerMessage = userMessage.toLowerCase();
       
-      if (lowerMessage.includes('script')) {
-        return "I'd love to tell you about our scripts! We have a huge collection of completely free automation tools, utilities, and development helpers. Our Discord community has even more resources and people who can help you find exactly what you need. Want me to share our scripts collection?";
+      if (lowerMessage.includes('script') || lowerMessage.includes('hack') || lowerMessage.includes('cheat')) {
+        return "🎮 **Scripts for Final Stand!**\n\n**Essential Scripts Available:**\n• Inf Stats Script (20 points per 8 seconds)\n• Auto Farm Scripts\n• Quality of Life Scripts\n\n**Get them here**: https://discord.gg/2J9qPu4f\n\n**Need help with installation?** Just ask! 🐉";
       }
       
-      if (lowerMessage.includes('help') || lowerMessage.includes('support')) {
-        return "I'm here to help! While I'm running in demo mode right now, I can still try to assist you. Our Discord community is also incredibly active - we have developers, scripters, and tech enthusiasts who love helping each other out. What specific help are you looking for?";
+      if (lowerMessage.includes('grind') || lowerMessage.includes('stats') || lowerMessage.includes('level')) {
+        return "⚡ **Stats Grinding Guide for Final Stand:**\n\n**Best Method:**\n• Use the **inf stats script**\n• Gives you **20 points per 8 seconds**\n• That's **6,200-7,200 points per hour!**\n\n**Get the script**: https://discord.gg/2J9qPu4f\n\nNeed help setting it up? Let me know! 🚀";
       }
       
-      if (lowerMessage.includes('discord')) {
-        return "Our Discord server is the heart of the Final Site community! It's where we share scripts, help each other with coding problems, discuss new tech, and just hang out. We've got channels for different programming languages, script sharing, general tech talk, and more. It's a really welcoming community for all skill levels.";
+      if (lowerMessage.includes('discord') || lowerMessage.includes('server') || lowerMessage.includes('community')) {
+        return "🔗 **Join our Final Stand Community!**\n\n**Official Discord**: https://discord.gg/2J9qPu4f\n\n**What you'll find:**\n• All essential scripts\n• Active community support\n• Game updates and news\n• Tips and strategies\n\nSee you there! 🎮";
       }
 
-      if (lowerMessage.includes('who are you') || lowerMessage.includes('what are you') || lowerMessage.includes('hi') || lowerMessage.includes('hello')) {
-        return "Hey there! I'm Zap, the AI assistant for Final Site! I'm here to help you learn about our community, find scripts, answer tech questions, and connect you with our awesome Discord community. Think of me as your friendly guide to everything Final Site has to offer. What would you like to know?";
+      if (lowerMessage.includes('final stand') || lowerMessage.includes('dragon ball') || lowerMessage.includes('roblox')) {
+        return "🐉 **Welcome to Final Stand Support!**\n\n**About the Game:**\n• Dragon Ball themed Roblox game\n• Level grinding and stats building\n• Active community with scripts and support\n\n**Popular Help Topics:**\n• Getting scripts → Discord server\n• Stats grinding → Inf stats script\n• General support → Ask me anything!\n\n**Discord**: https://discord.gg/2J9qPu4f";
       }
       
-      // Default fallbacks
+      // Default fallbacks for Final Stand
       const responses = AI_CONFIG.fallbackResponses;
       return responses[Math.floor(Math.random() * responses.length)];
     },
@@ -828,6 +1151,28 @@ Zap:`;
         // Handle special commands first
         if (userMessage.toLowerCase() === "/discord") {
           this.showDiscordConfirm = true;
+          return;
+        }
+
+        // Handle coding requests
+        const codingKeywords = ['code', 'create', 'build', 'make', 'develop', 'website', 'app', 'page', 'component'];
+        const hasCodingKeyword = codingKeywords.some(keyword => 
+          userMessage.toLowerCase().includes(keyword)
+        );
+
+        if (hasCodingKeyword && (
+          userMessage.toLowerCase().includes('website') || 
+          userMessage.toLowerCase().includes('page') ||
+          userMessage.toLowerCase().includes('app') ||
+          userMessage.toLowerCase().includes('component') ||
+          userMessage.toLowerCase().includes('build') ||
+          userMessage.toLowerCase().includes('create')
+        )) {
+          await this.simulateTyping("I'll help you code that! Opening the code editor... 💻", () => {
+            setTimeout(() => {
+              this.openCodingInterface(userMessage);
+            }, 1000);
+          });
           return;
         }
         
@@ -905,7 +1250,347 @@ Zap:`;
           container.scrollTop = container.scrollHeight;
         }
       }, 100);
-    }
+    },
+
+    openCodingInterface(prompt = '') {
+      this.showCodingInterface = true;
+      
+      // If there's a specific coding prompt, generate code for it
+      if (prompt) {
+        this.generateCodeFromPrompt(prompt);
+      }
+      
+      // Update preview after opening
+      setTimeout(() => {
+        this.updatePreview();
+      }, 100);
+    },
+
+    closeCodingInterface() {
+      this.showCodingInterface = false;
+    },
+
+    async generateCodeFromPrompt(prompt) {
+      // Simple code generation based on prompt keywords
+      const lowerPrompt = prompt.toLowerCase();
+      
+      if (lowerPrompt.includes('landing page') || lowerPrompt.includes('homepage')) {
+        this.codeFiles[0].content = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease;
+        }
+        .hero p {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        .btn {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: transform 0.3s ease;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .features {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+        .feature {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="container">
+            <h1>Welcome to Our Amazing Product</h1>
+            <p>Transform your business with our innovative solution</p>
+            <a href="#" class="btn">Get Started Today</a>
+        </div>
+    </section>
+    
+    <section class="features">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 20px;">Why Choose Us?</h2>
+            <div class="feature-grid">
+                <div class="feature">
+                    <h3>🚀 Fast Performance</h3>
+                    <p>Lightning-fast speeds that will boost your productivity</p>
+                </div>
+                <div class="feature">
+                    <h3>🔒 Secure</h3>
+                    <p>Enterprise-grade security to protect your data</p>
+                </div>
+                <div class="feature">
+                    <h3>📱 Mobile Ready</h3>
+                    <p>Works perfectly on all devices and screen sizes</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>`;
+      } else if (lowerPrompt.includes('todo') || lowerPrompt.includes('task')) {
+        this.codeFiles[0].content = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .todo-container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer
+        }
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .todo-item.completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        .delete-btn {
+            margin-left: auto;
+            background: #dc3545;
+            border-radius: 3px;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="todo-container">
+        <h1>📝 Todo App</h1>
+        <div class="input-group">
+            <input type="text" id="todoInput" placeholder="Add a new task...">
+            <button onclick="addTodo()">Add</button>
+        </div>
+        <div id="todoList"></div>
+    </div>
+
+    <script>
+        let todos = [];
+
+        function addTodo() {
+            const input = document.getElementById('todoInput');
+            const text = input.value.trim();
+            
+            if (text) {
+                todos.push({
+                    id: Date.now(),
+                    text: text,
+                    completed: false
+                });
+                input.value = '';
+                renderTodos();
+            }
+        }
+
+        function toggleTodo(id) {
+            todos = todos.map(todo => 
+                todo.id === id ? {...todo, completed: !todo.completed} : todo
+            );
+            renderTodos();
+        }
+
+        function deleteTodo(id) {
+            todos = todos.filter(todo => todo.id !== id);
+            renderTodos();
+        }
+
+        function renderTodos() {
+            const list = document.getElementById('todoList');
+            list.innerHTML = todos.map(todo => 
+        '<div class="todo-item ' + (todo.completed ? 'completed' : '') + '">' +
+            '<input type="checkbox" ' + (todo.completed ? 'checked' : '') + ' onchange="toggleTodo(' + todo.id + ')">' +
+            '<span style="margin-left: 10px;">' + todo.text + '</span>' +
+            '<button class="delete-btn" onclick="deleteTodo(' + todo.id + ')">Delete</button>' +
+        '</div>'
+    ).join('');
+        }
+
+        document.getElementById('todoInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTodo();
+            }
+        });
+    </script>
+</body>
+</html>`;
+      }
+      
+      this.updatePreview();
+    },
+
+    updatePreview() {
+      this.previewLoading = true;
+      
+      setTimeout(() => {
+        const iframe = this.$refs.previewFrame;
+        if (iframe) {
+          const htmlContent = this.codeFiles[0].content;
+          const blob = new Blob([htmlContent], { type: 'text/html' });
+          const url = URL.createObjectURL(blob);
+          iframe.src = url;
+          
+          iframe.onload = () => {
+            this.previewLoading = false;
+            URL.revokeObjectURL(url);
+          };
+        }
+      }, 500);
+    },
+
+    runCode() {
+      this.updatePreview();
+    },
+
+    refreshPreview() {
+      this.updatePreview();
+    },
+
+    formatCode() {
+      // Simple code formatting (basic indentation)
+      const currentFile = this.codeFiles[this.activeFileIndex];
+      if (currentFile.name.endsWith('.html')) {
+        // Basic HTML formatting
+        let formatted = currentFile.content
+          .replace(/></g, '>\n<')
+          .replace(/^\s+|\s+$/g, '');
+        
+        const lines = formatted.split('\n');
+        let indentLevel = 0;
+        const indentSize = 4;
+        
+        formatted = lines.map(line => {
+          const trimmed = line.trim();
+          if (trimmed.startsWith('</')) {
+            indentLevel = Math.max(0, indentLevel - 1);
+          }
+          
+          const indented = ' '.repeat(indentLevel * indentSize) + trimmed;
+          
+          if (trimmed.startsWith('<') && !trimmed.startsWith('</') && !trimmed.endsWith('/>')) {
+            indentLevel++;
+          }
+          
+          return indented;
+        }).join('\n');
+        
+        currentFile.content = formatted;
+      }
+    },
+
+    downloadCode() {
+      const zip = this.createZipFile();
+      const blob = new Blob([zip], { type: 'application/zip' });
+      const url = URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'zap-project.zip';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    },
+
+    createZipFile() {
+      // Simple zip creation (for demo purposes)
+      // In a real implementation, you'd use a proper zip library
+      let zipContent = '';
+      this.codeFiles.forEach(file => {
+        zipContent += `--- ${file.name} ---\n${file.content}\n\n`;
+      });
+      return zipContent;
+    },
   };
 }
 </script>
