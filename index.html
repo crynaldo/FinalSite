@@ -853,7 +853,7 @@ function app() {
     messages: [],
     showDiscordConfirm: false,
     showApiKeyModal: false,
-    apiKey: 'YOUR_ACTUAL_COHERE_API_KEY_HERE',
+    apiKey: 'co-2a8b9c7d4e5f6a1b2c3d4e5f6a7b8c9d0e1f2a3b',
     tempApiKey: '',
     debugMode: false,
     lastApiCall: '',
@@ -929,7 +929,7 @@ console.log('Hello from Zap!');
 
 // Example function
 function greetUser(name) {
-    return 'Hello, ' + name + '! Welcome to your project.';
+    return \`Hello, \${name}! Welcome to your project.\`;
 }
 
 // Example usage
@@ -942,7 +942,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     init() {
       // Load saved API key
-      this.apiKey = 'WUbYOhc9PrOTxf8lawrnpQywHRyoS0pahEFqnPQ3'; // Your custom Cohere API key
+      this.apiKey = 'co-2a8b9c7d4e5f6a1b2c3d4e5f6a7b8c9d0e1f2a3b'; // Your custom Cohere API key
       
       // Simulate loading time
       setTimeout(() => {
@@ -963,7 +963,7 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('cohere_api_key', this.apiKey);
         this.lastApiCall = 'Custom API key saved';
       } else {
-        this.apiKey = 'WUbYOhc9PrOTxf8lawrnpQywHRyoS0pahEFqnPQ3'; // Fallback to your key
+        this.apiKey = 'co-2a8b9c7d4e5f6a1b2c3d4e5f6a7b8c9d0e1f2a3b'; // Fallback to your key
       }
       this.showApiKeyModal = false;
       this.tempApiKey = '';
@@ -1424,7 +1424,7 @@ Zap:`;
             color: white;
             border: none;
             border-radius: 0 5px 5px 0;
-            cursor: pointer
+            cursor: pointer;
         }
         .todo-item {
             display: flex;
@@ -1487,13 +1487,14 @@ Zap:`;
 
         function renderTodos() {
             const list = document.getElementById('todoList');
-            list.innerHTML = todos.map(todo => 
-        '<div class="todo-item ' + (todo.completed ? 'completed' : '') + '">' +
-            '<input type="checkbox" ' + (todo.completed ? 'checked' : '') + ' onchange="toggleTodo(' + todo.id + ')">' +
-            '<span style="margin-left: 10px;">' + todo.text + '</span>' +
-            '<button class="delete-btn" onclick="deleteTodo(' + todo.id + ')">Delete</button>' +
-        '</div>'
-    ).join('');
+            list.innerHTML = todos.map(todo => `
+                <div class="todo-item ${todo.completed ? 'completed' : ''}">
+                    <input type="checkbox" ${todo.completed ? 'checked' : ''} 
+                           onchange="toggleTodo(${todo.id})">
+                    <span style="margin-left: 10px;">${todo.text}</span>
+                    <button class="delete-btn" onclick="deleteTodo(${todo.id})">Delete</button>
+                </div>
+            `).join('');
         }
 
         document.getElementById('todoInput').addEventListener('keypress', function(e) {
